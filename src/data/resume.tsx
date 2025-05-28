@@ -72,8 +72,8 @@ export const DATA = {
       logoUrl: "/nichetech.jpg",
       start: "july 2023",
       end: "Present",
-      // description:
-      //   "I worked at NicheTech Computer Solutions Private Limited as a backend developer, where I gained extensive experience in PHP, Laravel, Node.js, and Shopify. During my time there, I contributed to various projects, optimizing backend performance and integrating modern technologies. My efforts were recognized with the 'Best Rising Star' certificate, highlighting my dedication and growth within the team.",
+      description:
+        "I worked at NicheTech Computer Solutions Private Limited as a backend developer, where I gained extensive experience in PHP, Laravel, Node.js, and Shopify. During my time there, I contributed to various projects, optimizing backend performance and integrating modern technologies. My efforts were recognized with the 'Best Rising Star' certificate, highlighting my dedication and growth within the team.",
     },
   ],
   education: [
@@ -114,7 +114,7 @@ export const DATA = {
     {
       title: "Matrubharti",
       href: "https://matrubharti.com",
-      // dates: "Jan 2024 - Feb 2024",
+      dates: "Jan 2024 - Feb 2024",
       active: true,
       description:
         "With the release of the [OpenAI GPT Store](https://openai.com/blog/introducing-the-gpt-store), I decided to build a SaaS which allows users to collect email addresses from their GPT users. This is a great way to build an audience and monetize your GPT API usage.",
@@ -136,7 +136,7 @@ export const DATA = {
         },
       ],
       image: "/matrubharti.png",
-      // video:"https://pub-83c5db439b40468498f97946200806f7.r2.dev/chat-collect.mp4",
+      video:"https://pub-83c5db439b40468498f97946200806f7.r2.dev/chat-collect.mp4",
     },
     {
       title: "Sahj Anand",
@@ -168,7 +168,7 @@ export const DATA = {
         // },
       ],
       image: "/shajanand.png",
-      // video: "https://cdn.magicui.design/bento-grid.mp4",
+      video: "https://cdn.magicui.design/bento-grid.mp4",
     },
     {
       title: "Transporty",
