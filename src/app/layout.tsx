@@ -56,17 +56,17 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={cn(
-          "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6",
-          fontSans.variable
-        )}
+        // className={cn(
+        //   "min-h-screen bg-background font-sans antialiased max-w-2xl mx-auto py-12 sm:py-24 px-6",
+        //   fontSans.variable
+        // )}
       >
-        <ThemeProvider attribute="class" defaultTheme="light">
-          <TooltipProvider delayDuration={0}>
+        {/* <ThemeProvider attribute="class" defaultTheme="light">
+          <TooltipProvider delayDuration={0}> */}
             {children}
-            <Navbar />
-          </TooltipProvider>
-        </ThemeProvider>
+            {/* <Navbar /> */}
+          {/* </TooltipProvider>
+        </ThemeProvider> */}
       </body>
     </html>
   );
