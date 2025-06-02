@@ -8,23 +8,28 @@ export default function ShinchanHug() {
   const [isHugging, setIsHugging] = useState(false);
   const [showHearts, setShowHearts] = useState(false);
   const [hugCount, setHugCount] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    // Avoid hydration mismatch
+    setIsMobile(window.innerWidth < 640);
+  }, []);
 
   const handleHug = () => {
     setIsHugging(true);
     setShowHearts(true);
     setHugCount(prev => prev + 1);
-    
-    // Reset after animation
+
     setTimeout(() => {
       setIsHugging(false);
     }, 2000);
-    
+
     setTimeout(() => {
       setShowHearts(false);
     }, 3000);
   };
 
-  // Generate random hearts
+  // Generate heart animations
   const hearts = Array.from({ length: 8 }, (_, i) => (
     <motion.div
       key={i}
@@ -53,19 +58,15 @@ export default function ShinchanHug() {
   ));
 
   return (
-<div className="h-screen overflow-hidden relative flex flex-col items-center justify-center bg-gradient-to-br from-pink-100 via-blue-50 to-yellow-100 p-2 sm:p-4">
+    <div className="h-screen overflow-hidden relative flex flex-col items-center justify-center bg-gradient-to-br from-pink-100 via-blue-50 to-yellow-100 p-2 sm:p-4">
 
-      
-      {/* Floating background elements */}
+      {/* Floating background emojis */}
       <div className="absolute inset-0 pointer-events-none">
         {[...Array(6)].map((_, i) => (
           <motion.div
             key={i}
             className="absolute text-2xl sm:text-3xl opacity-20"
-            animate={{
-              y: [0, -20, 0],
-              rotate: [0, 360],
-            }}
+            animate={{ y: [0, -20, 0], rotate: [0, 360] }}
             transition={{
               duration: 4 + i,
               repeat: Infinity,
@@ -81,14 +82,14 @@ export default function ShinchanHug() {
         ))}
       </div>
 
-      {/* Main Shinchan Container */}
+      {/* Shinchan Image Container */}
       <div className="relative flex-1 flex items-center justify-center w-full max-w-4xl">
-        {/* Hearts container */}
+        {/* Hearts */}
         <div className="absolute inset-0 pointer-events-none">
           {hearts}
         </div>
 
-        {/* Shinchan Image */}
+        {/* Shinchan Image with animated text */}
         <motion.div
           initial={{ scale: 0.8 }}
           animate={{
@@ -118,8 +119,8 @@ export default function ShinchanHug() {
               }}
               priority
             />
-            
-            {/* Hug overlay effect */}
+
+            {/* Hug overlay */}
             {isHugging && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -129,32 +130,45 @@ export default function ShinchanHug() {
               />
             )}
 
-            {/* Sparkle effects around image */}
+            {/* Animated text phrases around image */}
             {isHugging && (
               <>
-                {[...Array(12)].map((_, i) => (
+                {[
+                  "So Cute!",
+                  "Hug Time!",
+                  "Love You!",
+                  "Shinchan!",
+                  "Aww!",
+                  "Warm Hug!",
+                  "Giggles!",
+                  "Cuddle!",
+                  "Haha!",
+                  "Best Bud!",
+                  "Kawaii~",
+                  "❤️"
+                ].map((text, i) => (
                   <motion.div
                     key={i}
                     initial={{ opacity: 0, scale: 0 }}
                     animate={{
                       opacity: [0, 1, 0],
-                      scale: [0, 1, 0],
-                      x: Math.cos(i * 30 * Math.PI / 180) * (window.innerWidth < 640 ? 60 : 100),
-                      y: Math.sin(i * 30 * Math.PI / 180) * (window.innerWidth < 640 ? 60 : 100),
+                      scale: [0, 1.1, 0],
+                      x: Math.cos((i * 30 * Math.PI) / 180) * (isMobile ? 60 : 100),
+                      y: Math.sin((i * 30 * Math.PI) / 180) * (isMobile ? 60 : 100),
                     }}
                     transition={{
                       duration: 1.5,
                       delay: i * 0.1,
                       ease: "easeOut"
                     }}
-                    className="absolute text-yellow-400 text-lg sm:text-xl pointer-events-none"
+                    className="absolute text-pink-600 font-semibold text-xs sm:text-sm pointer-events-none"
                     style={{
                       left: '50%',
                       top: '50%',
                       transform: 'translate(-50%, -50%)'
                     }}
                   >
-                    ✨
+                    {text}
                   </motion.div>
                 ))}
               </>
@@ -163,7 +177,7 @@ export default function ShinchanHug() {
         </motion.div>
       </div>
 
-      {/* Interactive Text */}
+      {/* Hug Message */}
       <motion.p 
         animate={{
           color: isHugging ? '#e11d48' : '#374151',
@@ -190,7 +204,7 @@ export default function ShinchanHug() {
         </motion.div>
       )}
 
-      {/* Fun Messages */}
+      {/* Fun Milestone Messages */}
       {hugCount >= 5 && (
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
