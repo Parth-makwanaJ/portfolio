@@ -26,7 +26,7 @@ export default function Hero() {
 
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight mb-6">
             Building digital <br className="hidden md:block" />
-            experiences with <span className="text-gradient">precision</span>
+            experience with <span className="text-gradient">precision</span>
           </h1>
 
           <p className="text-lg md:text-xl text-foreground/60 mb-10 max-w-2xl leading-relaxed">
