@@ -1,19 +1,34 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Bricolage_Grotesque, Instrument_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/Navbar";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { Header } from "@/components/site/Header";
 import { cn } from "@/lib/utils";
 
-const inter = Inter({
-  variable: "--font-sans",
-  display: "swap",
+const display = Bricolage_Grotesque({
   subsets: ["latin"],
+  variable: "--font-bricolage",
+  display: "swap",
+  axes: ["opsz", "wdth"],
+});
+
+const sans = Instrument_Sans({
+  subsets: ["latin"],
+  variable: "--font-instrument",
+  display: "swap",
+});
+
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains",
+  display: "swap",
+  weight: ["400", "500"],
 });
 
 export const metadata: Metadata = {
-  title: "Parth Makwana | Backend Developer",
-  description: "Portfolio of Parth Makwana, a Backend Developer specializing in scalable architectures, efficient APIs, and high-performance systems.",
+  title: "Parth Makwana | Developer and tech lead",
+  description:
+    "Parth Makwana builds fast Shopify stores and Laravel and Node.js backends, and fixes slow sites. Based in Ahmedabad, India.",
 };
 
 export default function RootLayout({
@@ -24,14 +39,19 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={cn("antialiased font-sans", inter.variable)}
+      className={cn(display.variable, sans.variable, mono.variable)}
       suppressHydrationWarning
     >
-      <body className="min-h-full flex flex-col relative font-sans bg-background text-foreground transition-colors duration-300">
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <div className="mesh-bg bg-background transition-colors duration-300" />
-          <Navbar />
-          {children}
+      <body>
+        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false} disableTransitionOnChange>
+          <a
+            href="#main"
+            className="label sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[200] focus:bg-signal focus:px-4 focus:py-3 focus:text-on-signal"
+          >
+            Skip to content
+          </a>
+          <Header />
+          <main id="main">{children}</main>
         </ThemeProvider>
       </body>
     </html>

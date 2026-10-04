@@ -97,7 +97,7 @@ export const profile = {
   headline: "Fast Shopify stores and solid backends for growing businesses.",
   intro:
     "I'm Parth, a developer and tech lead in Ahmedabad, India. I build Shopify stores, Laravel and Node.js backends, and I make slow sites fast.",
-  availability: "Taking on new freelance projects.",
+  availability: "Taking on new freelance projects",
   photo: {
     src: "/images/parth-makwana.jpg",
     width: 1600,
