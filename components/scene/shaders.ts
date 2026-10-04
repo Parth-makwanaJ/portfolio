@@ -54,139 +54,140 @@ export const vertexShader = /* glsl */ `
     return vec3((r.x - 0.5) * uView.x * k, (r.y - 0.5) * uView.y * k, z);
   }
 
+  // Each form returns a position, an alpha and a size factor.
+  struct F { vec3 p; float a; float s; };
+
   // 0 · hero: a loose cloud that gathers into a dense core. A share stays behind as dust.
-  vec3 formHero(out float a, out float sz) {
+  F formHero() {
     vec3 cloud = volume(aS.xyz, 4.0, -16.0) + drift(0.12);
-    if (aR.x < 0.3) { a = 0.5; sz = 0.8; return cloud; }
-    float rr = pow(aR.y, 1.7);
-    float r = uUnit * (0.015 + 0.36 * rr);
+    float rr = pow(aR.y, 1.25);
+    float r = uUnit * (0.03 + 0.34 * rr);
     vec3 p = sphereDir(aR.zw) * r;
     p = rotY(p, uTime * 0.22 / (0.35 + rr * 2.5));
     p = rotX(p, 0.35);
     p += uFocus[0];
     float delay = 0.5 * (0.55 * aR.y + 0.45 * aS.w);
     float k = smoothstep(0.0, 1.0, clamp((uIntro - delay) / 0.5, 0.0, 1.0));
-    a = mix(0.55, 0.55 + 0.45 * (1.0 - rr), k);
-    sz = mix(0.8, 0.75 + 0.35 * (1.0 - rr), k);
-    return mix(cloud, p, k);
+    // The centre is dense but each point stays faint, so it reads as a grain, not a blob.
+    float a = mix(0.55, 0.3 + 0.45 * rr, k);
+    float sz = mix(0.8, 0.7 + 0.25 * rr, k);
+    // Dust: about a third stays behind as a loose cloud.
+    float dust = step(aR.x, 0.3);
+    return F(mix(mix(cloud, p, k), cloud, dust), mix(a, 0.5, dust), mix(sz, 0.8, dust));
   }
 
   // 1 · Shopify: stacked horizontal layers, like shelves, sliding past each other.
-  vec3 formShelves(out float a, out float sz) {
+  // Each shelf is a thin sheet with a brighter front edge, so the layers read at a glance.
+  F formShelves() {
     float lv = floor(aR.x * 5.0);
-    float gap = uUnit * mix(0.19, 0.15, uPhone);
-    vec3 p = vec3((aR.y - 0.5) * uView.x * 1.3, (lv - 2.0) * gap + (aR.w - 0.5) * 0.025, (aR.z - 0.5) * 7.0);
-    p.x += sin(uTime * 0.16 + lv * 1.7) * 0.4;
-    p = rotY(p, -0.22 + sin(uTime * 0.05) * 0.06);
-    p = rotX(p, 0.42);
-    a = 0.6 + 0.4 * smoothstep(0.7, 1.0, aR.z);
-    sz = 0.8;
-    return p + uFocus[1];
+    float gap = uUnit * mix(0.24, 0.17, uPhone);
+    float depth = 3.6;
+    bool edge = aR.z > 0.86;
+    float z = edge ? depth * 0.5 : (aR.z / 0.86 - 0.5) * depth;
+    vec3 p = vec3((aR.y - 0.5) * uView.x * 1.3, (lv - 2.0) * gap + (aR.w - 0.5) * 0.02, z);
+    p.x += sin(uTime * 0.16 + lv * 1.7) * 0.45;
+    p = rotY(p, -0.18 + sin(uTime * 0.05) * 0.05);
+    p = rotX(p, 0.24);
+    return F(p + uFocus[1], edge ? 1.0 : 0.55, edge ? 0.95 : 0.75);
   }
 
   // 2 · Backend: the ordered lattice. One particle per slot, so the drawn set is the full grid.
-  vec3 formLattice(out float a, out float sz) {
+  F formLattice() {
     float n = uLatN;
     float x = mod(aSlot, n), y = mod(floor(aSlot / n), n), z = floor(aSlot / (n * n));
-    float span = max(uView.x, uView.y) * 1.1;
+    float span = max(uView.x, uView.y) * 1.05;
     vec3 p = (vec3(x, y, z) - (n - 1.0) * 0.5) * (span / (n - 1.0));
     p = rotY(p, uTime * 0.035 + 0.55);
     p = rotX(p, 0.3);
-    a = 0.75;
-    sz = 0.72;
-    return p + uFocus[2];
+    return F(p + uFocus[2], 0.85, 0.75);
   }
 
   // 3 · Speed: long streaks stretched in depth, moving past the camera.
-  vec3 formSpeed(out float a, out float sz) {
-    float id = floor(aR.x * 520.0);
+  F formSpeed() {
+    float id = floor(aR.x * 380.0);
     float h1 = hash(id * 12.9898), h2 = hash(id * 78.233), h3 = hash(id * 39.425);
     float ang = h1 * TAU;
-    float rad = mix(uUnit * 0.22, max(uView.x, uView.y) * 1.15, pow(h2, 0.75));
-    float len = 2.4 + h3 * 3.2;
-    float head = mod(h3 * 46.0 + uTime * (4.5 + h2 * 4.0), 46.0) - 34.0;
-    vec3 p = vec3(cos(ang) * rad, sin(ang) * rad * mix(0.75, 1.0, uPhone), head - aR.y * len);
-    a = 0.35 + 0.65 * (1.0 - aR.y);
-    sz = 0.7;
-    return p + vec3(uFocus[3].xy, 0.0);
+    float rad = mix(uUnit * 0.25, max(uView.x, uView.y) * 0.95, pow(h2, 0.85));
+    float len = 4.0 + h3 * 5.0;
+    float head = mod(h3 * 46.0 + uTime * (5.0 + h2 * 5.0), 46.0) - 34.0;
+    vec3 p = vec3(cos(ang) * rad, sin(ang) * rad * mix(0.72, 1.0, uPhone), head - aR.y * len);
+    return F(p + vec3(uFocus[3].xy, 0.0), 0.45 + 0.55 * (1.0 - aR.y), 0.95);
   }
 
   // 4 · SEO: rings expanding outwards from a centre, like a signal spreading over a plane.
-  vec3 formRings(out float a, out float sz) {
+  F formRings() {
     float id = floor(aR.x * 12.0);
     float ph = fract(id / 12.0 + uTime * 0.045);
     float r = ph * max(uView.x, uView.y) * 1.05 + uUnit * 0.02;
     float ang = aR.y * TAU;
     vec3 p = vec3(cos(ang) * r, sin(ang) * r, 0.0) + vec3((aR.zw - 0.5) * 0.05, (aS.x - 0.5) * 0.05);
     p = rotX(p, -1.08);
-    a = smoothstep(0.0, 0.05, ph) * (1.0 - smoothstep(0.5, 1.0, ph));
-    sz = 0.8;
-    return p + uFocus[4];
+    float a = smoothstep(0.0, 0.05, ph) * (1.0 - smoothstep(0.5, 1.0, ph));
+    return F(p + uFocus[4], a, 0.8);
   }
 
   // 5 · Work: the field thins out and recedes so the glass and the images lead.
-  vec3 formWork(out float a, out float sz) {
-    a = 0.35;
-    sz = 0.7;
-    return volume(aS.xyz, -7.0, -24.0) + drift(0.15);
+  F formWork() {
+    return F(volume(aS.xyz, -7.0, -24.0) + drift(0.15), 0.35, 0.7);
   }
 
-  // 6 · Process: one flowing path with five bright nodes, one per step. Nodes light as the
+  // 6 · Process: one flowing path with five bright nodes, one per step. On desktop it runs down the
+  // right half (the steps are on the left); on phones it runs down the screen. Nodes light as the
   // process line in the page reaches each step.
   vec3 pathAt(float u) {
     if (uPhone > 0.5) {
       return vec3(sin(u * TAU * 0.8 + 0.6) * uView.x * 0.3, mix(uView.y * 0.46, -uView.y * 0.46, u), sin(u * TAU * 0.6) * 1.5 - 1.0);
     }
-    return vec3(mix(-uView.x * 0.52, uView.x * 0.52, u), sin(u * TAU * 0.85 + 0.4) * uView.y * 0.24, sin(u * TAU * 0.55 + 1.0) * 2.2 - 1.0);
+    return vec3(
+      mix(-uView.x * 0.02, uView.x * 0.44, u) + sin(u * TAU * 0.9) * uView.x * 0.05,
+      mix(uView.y * 0.36, -uView.y * 0.36, u) + sin(u * TAU * 1.1 + 0.5) * uView.y * 0.06,
+      sin(u * TAU * 0.55 + 1.0) * 2.0 - 1.0
+    );
   }
-  vec3 formProcess(out float a, out float sz) {
-    a = 0.7;
-    sz = 0.75;
-    if (aR.x < 0.24) {
-      float k = floor(aR.y * 5.0);
-      float lit = mix(0.3, 1.0, smoothstep(k / 5.0 - 0.02, k / 5.0 + 0.08, uProcess));
-      float r = uUnit * 0.055 * pow(aR.z, 1.5);
-      a = lit;
-      sz = mix(0.9, 1.25, lit);
-      return pathAt((k + 0.5) / 5.0) + sphereDir(vec2(aR.w, aS.w)) * r + uFocus[6];
-    }
+  F formProcess() {
+    vec3 dir = sphereDir(vec2(aR.w, aS.w));
+    // About a quarter of the particles form the five nodes, the rest flow along the path.
+    float k = floor(aR.y * 5.0);
+    float lit = mix(0.3, 1.0, smoothstep(k / 5.0 - 0.02, k / 5.0 + 0.08, uProcess));
+    vec3 nodeP = pathAt((k + 0.5) / 5.0) + dir * uUnit * 0.05 * pow(aR.z, 1.5);
     float u = fract(aR.y + uTime * 0.018);
-    float th = uUnit * (0.01 + 0.035 * pow(aR.z, 3.0));
-    return pathAt(u) + sphereDir(vec2(aR.w, aS.w)) * th + uFocus[6];
+    vec3 flowP = pathAt(u) + dir * uUnit * (0.01 + 0.035 * pow(aR.z, 3.0));
+    float node = step(aR.x, 0.24);
+    return F(mix(flowP, nodeP, node) + uFocus[6], mix(0.7, lit, node), mix(0.75, mix(0.9, 1.2, lit), node));
   }
 
   // 7 · Contact: a calm sphere, slowly turning (Fibonacci points over every slot).
-  vec3 formSphere(out float a, out float sz) {
-    if (aR.x < 0.15) { a = 0.35; sz = 0.7; return volume(aS.xyz, 2.0, -14.0) + drift(0.12); }
+  F formSphere() {
     float i = aSlot + 0.5;
     float y = 1.0 - 2.0 * i / uN;
     float q = sqrt(max(0.0, 1.0 - y * y));
-    float th = i * 2.3999632;
-    vec3 p = vec3(cos(th) * q, y, sin(th) * q) * uUnit * 0.36;
+    // Golden-angle turns as a fraction first: sin/cos of large angles lose precision on GPUs.
+    float th = fract(i * 0.381966) * TAU;
+    vec3 p = vec3(cos(th) * q, y, sin(th) * q) * uUnit * 0.31;
     p = rotY(p, uTime * 0.07);
     p = rotX(p, 0.28);
-    a = 0.85;
-    sz = 0.85;
-    return p + uFocus[7];
+    float dust = step(aR.x, 0.15);
+    return F(mix(p + uFocus[7], volume(aS.xyz, 2.0, -14.0) + drift(0.12), dust), mix(0.85, 0.35, dust), mix(0.85, 0.7, dust));
   }
 
-  vec3 form(int f, out float a, out float sz) {
-    a = 0.0;
-    sz = 1.0;
-    if (f == 0) return formHero(a, sz);
-    if (f == 1) return formShelves(a, sz);
-    if (f == 2) return formLattice(a, sz);
-    if (f == 3) return formSpeed(a, sz);
-    if (f == 4) return formRings(a, sz);
-    if (f == 5) return formWork(a, sz);
-    if (f == 6) return formProcess(a, sz);
-    return formSphere(a, sz);
+  F form(int f) {
+    F r;
+    if (f == 0) r = formHero();
+    else if (f == 1) r = formShelves();
+    else if (f == 2) r = formLattice();
+    else if (f == 3) r = formSpeed();
+    else if (f == 4) r = formRings();
+    else if (f == 5) r = formWork();
+    else if (f == 6) r = formProcess();
+    else r = formSphere();
+    return r;
   }
 
   void main() {
-    float aA, sA, aB, sB;
-    vec3 A = form(uFrom, aA, sA);
-    vec3 B = form(uTo, aB, sB);
+    F fa = form(uFrom);
+    F fb = form(uTo);
+    vec3 A = fa.p;
+    vec3 B = fb.p;
 
     // Ripple: a sweep across the screen (down it on phones) plus a little randomness.
     float sweep = uPhone > 0.5 ? clamp(0.5 - A.y / uView.y, 0.0, 1.0) : clamp(A.x / uView.x + 0.5, 0.0, 1.0);
@@ -195,8 +196,8 @@ export const vertexShader = /* glsl */ `
     vec3 pos = mix(A, B, k);
     // Travel in arcs, not straight lines.
     pos += sin(k * 3.14159) * (aR.wzy - 0.5) * uUnit * 0.2;
-    float alpha = mix(aA, aB, k);
-    float size = mix(sA, sB, k);
+    float alpha = mix(fa.a, fb.a, k);
+    float size = mix(fa.s, fb.s, k);
 
     // Visible count per state: particles past it fade out as their own morph completes.
     float count = mix(uCountA, uCountB, k);
@@ -213,7 +214,7 @@ export const vertexShader = /* glsl */ `
 
     gl_Position = projectionMatrix * mv;
     gl_PointSize = min(uMaxSize, uSize * uPR * size * (0.6 + aR.w * 0.8) / depth);
-    float nearFade = smoothstep(1.4, 3.6, depth);
+    float nearFade = smoothstep(1.8, 4.5, depth);
     float fog = smoothstep(44.0, 8.0, depth);
     vAlpha = alpha * nearFade * (0.12 + 0.88 * fog) * (0.45 + 0.55 * aR.z);
   }

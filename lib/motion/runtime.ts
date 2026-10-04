@@ -61,34 +61,27 @@ function reveals() {
   document.querySelectorAll<HTMLElement>("[data-reveal]").forEach((el) => {
     // Already on screen: leave it exactly as it is.
     if (el.getBoundingClientRect().top < vh * 0.9) return;
+    // Hidden until it arrives; split into lines only then (splitting every heading up front is a
+    // long task on slow phones). ScrollTrigger also catches a jump past the heading.
+    gsap.set(el, { opacity: 0 });
+    ScrollTrigger.create({ trigger: el, start: "top 88%", once: true, onEnter: () => reveal(el) });
+  });
+}
 
-    if (reduced()) {
-      gsap.from(el, { opacity: 0, duration: 0.15, ease: "none", scrollTrigger: { trigger: el, start: "top 90%", once: true } });
-      return;
-    }
-
-    let done = false;
-    SplitText.create(el, {
-      type: "lines",
-      mask: "lines",
-      linesClass: "rl",
-      autoSplit: true,
-      onSplit(self) {
-        if (done) return;
-        return gsap.from(self.lines, {
-          yPercent: 112,
-          duration: 0.6,
-          ease: "power3.out",
-          stagger: 0.07,
-          scrollTrigger: { trigger: el, start: "top 88%", once: true },
-          onComplete() {
-            done = true;
-            // Back to the original markup: no masks left to clip descenders, nothing to re-split.
-            self.revert();
-          },
-        });
-      },
-    });
+function reveal(el: HTMLElement) {
+  if (reduced()) {
+    gsap.to(el, { opacity: 1, duration: 0.15, ease: "none" });
+    return;
+  }
+  const split = SplitText.create(el, { type: "lines", mask: "lines", linesClass: "rl" });
+  gsap.set(el, { opacity: 1 });
+  gsap.from(split.lines, {
+    yPercent: 112,
+    duration: 0.6,
+    ease: "power3.out",
+    stagger: 0.07,
+    // Back to the original markup: no masks left to clip descenders, nothing to re-split on resize.
+    onComplete: () => split.revert(),
   });
 }
 

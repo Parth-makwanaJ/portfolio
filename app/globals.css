@@ -294,7 +294,7 @@ html.js .services-stage {
 .services-panel {
   transition:
     opacity var(--dur-base) var(--ease-out-brand),
-    transform 450ms var(--ease-out-brand);
+    transform 350ms var(--ease-out-brand);
 }
 html.js .services-panels {
   display: grid;
@@ -308,7 +308,7 @@ html.js .services-panel {
   visibility: hidden;
   transition:
     opacity var(--dur-base) var(--ease-out-brand),
-    transform 450ms var(--ease-out-brand),
+    transform 350ms var(--ease-out-brand),
     visibility 0s linear var(--dur-base);
 }
 html.js [data-step="0"] .services-panel[data-index="0"],
@@ -321,7 +321,7 @@ html.js [data-step="3"] .services-panel[data-index="3"] {
   visibility: visible;
   transition:
     opacity 350ms var(--ease-out-brand) 80ms,
-    transform 450ms var(--ease-out-brand) 80ms,
+    transform 350ms var(--ease-out-brand) 80ms,
     visibility 0s;
 }
 .services-rail {
@@ -423,17 +423,17 @@ html.has-cursor select {
     color var(--dur-fast) var(--ease-out-brand),
     box-shadow var(--dur-base) var(--ease-out-brand);
 }
-.cursor[data-state="link"] .cursor-ring > span {
+.cursor-ring[data-state="link"] > span {
   transform: scale(0.5);
   box-shadow: inset 0 0 0 1px var(--fg);
 }
-.cursor[data-state="view"] .cursor-ring > span {
+.cursor-ring[data-state="view"] > span {
   transform: scale(1);
   background: var(--signal);
   box-shadow: none;
   color: var(--on-signal);
 }
-.cursor[data-state="view"] .cursor-dot,
+.cursor-dot[data-state="view"],
 .cursor[data-state="hidden"] {
   opacity: 0;
 }
@@ -455,7 +455,8 @@ html.has-cursor select {
 
 /* Page transition on client-side navigation (app/template.tsx). Never on first load. */
 .page-enter {
-  animation: page-enter var(--dur-slow) var(--ease-out-brand) both;
+  /* backwards, not both: no transform is left behind, so the fixed canvas stays fixed to the viewport */
+  animation: page-enter var(--dur-slow) var(--ease-out-brand) backwards;
 }
 @keyframes page-enter {
   from {

@@ -14,7 +14,7 @@ export function SelectedWork() {
       id="work"
       data-stop-mark="5"
       aria-labelledby="work-title"
-      className="relative flex min-h-svh flex-col justify-center pt-[38svh] pb-20 md:py-32"
+      className="relative flex min-h-svh flex-col justify-center pt-[38svh] pb-20 md:py-20"
     >
       <div className="container-page">
         <div className="md:w-[52%]">

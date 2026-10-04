@@ -51,8 +51,8 @@ const FLOOR_FPS = 40;
 
 // Visible particles per state: hero, shopify, backend, speed, seo, work, process, contact.
 // Full count only for the lattice, which needs every slot; lowest at work, where the glass leads.
-const COUNT_DESKTOP = [22000, 26000, 50653, 18000, 22000, 3000, 16000, 18000];
-const COUNT_PHONE = [9000, 10000, 19683, 8000, 9000, 1500, 7000, 8000];
+const COUNT_DESKTOP = [22000, 26000, 50653, 20000, 22000, 3000, 16000, 18000];
+const COUNT_PHONE = [9000, 10000, 19683, 9000, 9000, 1500, 7000, 8000];
 
 const lerp = (a: number, b: number, t: number) => a + (b - a) * t;
 const damp = (a: number, b: number, lambda: number, dt: number) => lerp(a, b, 1 - Math.exp(-lambda * dt));
@@ -60,6 +60,9 @@ const damp = (a: number, b: number, lambda: number, dt: number) => lerp(a, b, 1 
 const presence = (s: number, stop: number) => smooth(0, 1, 1 - Math.min(1, Math.abs(s - stop)));
 
 type Debug = Window & { __scene?: { fps: number[]; fallback: string | null; stop: number } };
+
+/** Yields to the browser so long setup work is split into short tasks. */
+const nextTask = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
 
 function webglAvailable() {
   try {
@@ -130,12 +133,15 @@ export function mountScene(container: HTMLElement): () => void {
   }
 
   const mobile = sceneInput.mobile;
+  let disposed = false;
   const debug = window as Debug;
   debug.__scene = { fps: [], fallback: null, stop: 0 };
   // ?scene-debug: measure the real frame rate per state (the guard is off, so it never stops the loop).
   const measuring = new URLSearchParams(window.location.search).has("scene-debug");
 
-  const renderer = new WebGLRenderer({ antialias: true, powerPreference: "high-performance", alpha: false });
+  // MSAA only on low-density screens: points don't need it, and at 1.5x and up the glass edges are
+  // smooth enough without paying for it on every frame.
+  const renderer = new WebGLRenderer({ antialias: window.devicePixelRatio < 1.5, powerPreference: "high-performance", alpha: false });
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, mobile ? 1.5 : 2));
   renderer.setClearColor(BG, 1);
   renderer.outputColorSpace = SRGBColorSpace;
@@ -148,8 +154,7 @@ export function mountScene(container: HTMLElement): () => void {
   scene.background = new Color(BG);
   const camera = new PerspectiveCamera(FOV, 1, 0.1, 80);
   camera.position.set(0, 0, CAM_Z);
-  const envRT = studioEnvironment(renderer);
-  scene.environment = envRT.texture;
+  let envRT: WebGLRenderTarget | null = null;
 
   /* ---------------------------------------------------------------- particles */
 
@@ -178,7 +183,7 @@ export function mountScene(container: HTMLElement): () => void {
       uPhone: { value: mobile ? 1 : 0 },
       uSize: { value: mobile ? 26 : 30 },
       uPR: { value: renderer.getPixelRatio() },
-      uMaxSize: { value: 26 * renderer.getPixelRatio() },
+      uMaxSize: { value: 20 * renderer.getPixelRatio() },
       uMouse: { value: new Vector2(9, 9) },
       uMouseStr: { value: 0 },
       uAspect: { value: 1 },
@@ -202,41 +207,68 @@ export function mountScene(container: HTMLElement): () => void {
   const slugs = (container.dataset.projects ?? "").split(",").filter(Boolean).slice(0, 4);
   const cards: Mesh[] = [];
   const cardZ = slugs.map(() => 0);
-  const sliceGeometry = new RoundedBoxGeometry(0.44, 1.7, 0.22, 3, 0.02);
-  const glass = mobile
-    ? new MeshPhysicalMaterial({ color: "#ffffff", transparent: true, opacity: 0.16, roughness: 0.05, metalness: 0 })
-    : new MeshPhysicalMaterial({ color: "#ffffff", transmission: 1, thickness: 0.5, roughness: 0.04, ior: 1.5, dispersion: 3, metalness: 0 });
-  const slices = Array.from({ length: 5 }, () => {
-    const m = new Mesh(sliceGeometry, glass);
-    work.add(m);
-    return m;
-  });
+  const slices: Mesh[] = [];
+  let sliceGeometry: RoundedBoxGeometry | null = null;
+  let glass: MeshPhysicalMaterial | null = null;
 
-  let texturesRequested = false;
-  const loadCards = () => {
-    texturesRequested = true;
+  /**
+   * The work state is built a few seconds in (or when the visitor gets close), one small step per
+   * task so nothing blocks the page: environment (desktop), glass, textures, then an async compile
+   * and, on desktop, one offscreen frame that allocates the transmission buffer.
+   */
+  let workRequested = false;
+  const setupWork = async () => {
+    workRequested = true;
+    if (!mobile) {
+      envRT = studioEnvironment(renderer);
+      scene.environment = envRT.texture;
+      await nextTask();
+    }
+    if (disposed) return;
+    sliceGeometry = new RoundedBoxGeometry(0.44, 1.7, 0.22, 3, 0.02);
+    glass = mobile
+      ? new MeshPhysicalMaterial({ color: "#ffffff", transparent: true, opacity: 0.16, roughness: 0.05, metalness: 0 })
+      : new MeshPhysicalMaterial({ color: "#ffffff", transmission: 1, thickness: 0.5, roughness: 0.04, ior: 1.5, dispersion: 3, metalness: 0 });
+    for (let k = 0; k < 5; k++) {
+      const m = new Mesh(sliceGeometry, glass);
+      slices.push(m);
+      work.add(m);
+    }
     const loader = new TextureLoader();
-    Promise.all(slugs.map((slug) => loader.loadAsync(`/scene/${slug}.webp`)))
-      .then((textures: Texture[]) => {
-        if (disposed) return textures.forEach((t) => t.dispose());
-        textures.forEach((t) => {
-          t.colorSpace = SRGBColorSpace;
-          t.anisotropy = 4;
-          const img = t.image as HTMLImageElement;
-          const card = new Mesh(new PlaneGeometry(2.3, (2.3 * img.height) / img.width), new MeshBasicMaterial({ map: t, toneMapped: false }));
-          cards.push(card);
-          work.add(card);
-          renderer.initTexture(t); // upload now, not on the frame the work state arrives
-        });
-        // Compile the new materials now too, then draw again if the loop is not running.
-        const was = work.visible;
-        work.visible = true;
-        renderer.compile(scene, camera);
-        work.visible = was;
-        if (mode !== "live") renderStatic();
-      })
-      .catch(() => {});
+    const textures: Texture[] = await Promise.all(slugs.map((slug) => loader.loadAsync(`/scene/${slug}.webp`))).catch(() => []);
+    if (disposed) return textures.forEach((t) => t.dispose());
+    for (const t of textures) {
+      t.colorSpace = SRGBColorSpace;
+      t.anisotropy = 4;
+      const img = t.image as HTMLImageElement;
+      const card = new Mesh(new PlaneGeometry(2.3, (2.3 * img.height) / img.width), new MeshBasicMaterial({ map: t, toneMapped: false }));
+      card.visible = false;
+      cards.push(card);
+      work.add(card);
+      renderer.initTexture(t); // upload now, not on the frame the work state arrives
+      await nextTask();
+      if (disposed) return;
+    }
+    const was = work.visible;
+    work.visible = true;
+    cards.forEach((c) => (c.visible = true));
+    await renderer.compileAsync(scene, camera);
+    if (disposed) return;
+    if (!mobile) {
+      await nextTask();
+      if (disposed) return;
+      const size = renderer.getDrawingBufferSize(new Vector2());
+      const rt = new WebGLRenderTarget(size.x, size.y);
+      renderer.setRenderTarget(rt);
+      renderer.render(scene, camera);
+      renderer.setRenderTarget(null);
+      rt.dispose();
+    }
+    work.visible = was;
+    workReady = true;
+    if (mode !== "live") renderStatic();
   };
+  let workReady = false;
 
   /* ---------------------------------------------------------------- layout */
 
@@ -257,8 +289,8 @@ export function mountScene(container: HTMLElement): () => void {
     // Where each form sits. Desktop: the contained forms sit right of the text column.
     // Phones: above the text, which sits low on the screen.
     const focus: [number, number, number][] = mobile
-      ? [[0, H * 0.2, 0], [0, H * 0.1, -1], [0, 0, -4], [0, H * 0.12, 0], [0, H * 0.16, -1.5], [0, 0, 0], [0, 0, 0], [0, H * 0.2, -1]]
-      : [[W * 0.22, H * 0.03, 0], [W * 0.06, 0, -1], [0, 0, -5], [W * 0.16, 0, 0], [W * 0.2, -H * 0.06, -2], [0, 0, 0], [0, 0, 0], [W * 0.2, 0, -1]];
+      ? [[0, H * 0.25, 0], [0, H * 0.1, -1], [0, 0, -4], [0, H * 0.12, 0], [0, H * 0.16, -1.5], [0, 0, 0], [0, 0, 0], [0, H * 0.2, -1]]
+      : [[W * 0.22, H * 0.03, 0], [W * 0.06, 0, -1], [0, 0, -5], [W * 0.16, 0, 0], [W * 0.2, -H * 0.06, -2], [0, 0, 0], [0, 0, 0], [W * 0.25, 0, -1]];
     focus.forEach((f, k) => (u.uFocus.value[k] as Vector3).set(...f));
     if (mode !== "live") renderStatic();
   };
@@ -320,7 +352,7 @@ export function mountScene(container: HTMLElement): () => void {
 
     // Glass and cards at the work state.
     const p = presence(s, 5);
-    work.visible = p > 0.01 && cards.length > 0;
+    work.visible = p > 0.01 && workReady;
     if (work.visible) {
       const W = view.x;
       const H = view.y;
@@ -345,7 +377,7 @@ export function mountScene(container: HTMLElement): () => void {
   };
 
   const renderStatic = () => {
-    if (disposed) return;
+    if (disposed || !compiled) return;
     timeline.s = target();
     timeline.intro = 1;
     apply(timeline.s, 1);
@@ -357,7 +389,7 @@ export function mountScene(container: HTMLElement): () => void {
 
   let raf = 0;
   let last = 0;
-  let disposed = false;
+  let compiled = false;
   let running = false;
   let onScreen = true;
   // Guard: one sample per second of live rendering; the median of the last five decides.
@@ -376,7 +408,7 @@ export function mountScene(container: HTMLElement): () => void {
     timeline.s = damp(timeline.s, target(), 5, dt);
     timeline.intro = smooth(0.3, 2.6, elapsed);
     apply(timeline.s, dt);
-    if (!texturesRequested && (elapsed > 3.5 || timeline.s > 2)) loadCards();
+    if (!workRequested && (elapsed > 3.5 || timeline.s > 2)) void setupWork();
 
     renderer.render(scene, camera);
     if (!shown) {
@@ -409,7 +441,7 @@ export function mountScene(container: HTMLElement): () => void {
   };
 
   const play = () => {
-    if (running || disposed || mode !== "live" || document.hidden || !onScreen) return;
+    if (running || disposed || !compiled || mode !== "live" || document.hidden || !onScreen) return;
     running = true;
     last = 0;
     sampleStart = 0;
@@ -445,27 +477,20 @@ export function mountScene(container: HTMLElement): () => void {
   ro.observe(container);
   resize();
 
-  // Compile every material once up front, the hidden glass included, and draw one offscreen frame
-  // with it so the transmission buffer is allocated now and not on the frame the work state arrives.
-  work.visible = true;
-  renderer.compile(scene, camera);
-  if (!mobile) {
-    const size = renderer.getDrawingBufferSize(new Vector2());
-    const rt = new WebGLRenderTarget(size.x, size.y);
-    renderer.setRenderTarget(rt);
-    renderer.render(scene, camera);
-    renderer.setRenderTarget(null);
-    rt.dispose();
-  }
-  work.visible = false;
-
   document.addEventListener("visibilitychange", onVisibility);
   window.addEventListener("scroll", onScroll, { passive: true });
-  if (mode === "live") play();
-  else {
-    renderStatic();
-    loadCards();
-  }
+
+  // Compile the particle shader without blocking the page (parallel shader compile where the
+  // browser supports it), then start drawing.
+  void renderer.compileAsync(scene, camera).then(() => {
+    if (disposed) return;
+    compiled = true;
+    if (mode === "live") play();
+    else {
+      renderStatic();
+      void setupWork();
+    }
+  });
 
   return () => {
     disposed = true;
@@ -477,15 +502,15 @@ export function mountScene(container: HTMLElement): () => void {
     window.removeEventListener("scroll", onScroll);
     geometry.dispose();
     material.dispose();
-    sliceGeometry.dispose();
-    glass.dispose();
+    sliceGeometry?.dispose();
+    glass?.dispose();
     cards.forEach((c) => {
       c.geometry.dispose();
       const m = c.material as MeshBasicMaterial;
       m.map?.dispose();
       m.dispose();
     });
-    envRT.dispose();
+    envRT?.dispose();
     renderer.dispose();
     renderer.forceContextLoss();
     canvas.remove();

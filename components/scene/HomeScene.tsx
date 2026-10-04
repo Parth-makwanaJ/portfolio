@@ -22,8 +22,11 @@ export function HomeScene({ projects }: { projects: string[] }) {
       void import("@/components/scene/scene").then(({ mountScene }) => {
         if (!cancelled && ref.current) dispose = mountScene(ref.current);
       });
-    // After first paint and the load event, so the canvas never competes with the text.
-    const start = () => (raf = requestAnimationFrame(() => setTimeout(mount, 0)));
+    // After the load event, when the browser is idle, so the canvas never competes with the text.
+    const start = () =>
+      (raf = requestAnimationFrame(() =>
+        "requestIdleCallback" in window ? window.requestIdleCallback(mount, { timeout: 1200 }) : setTimeout(mount, 0),
+      ));
     if (document.readyState === "complete") start();
     else window.addEventListener("load", start, { once: true });
     return () => {

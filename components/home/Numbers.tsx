@@ -5,7 +5,7 @@ import { stats, techStack } from "@/content/site";
 export function Numbers() {
   return (
     <section aria-labelledby="facts-title" className="pb-(--section-space)">
-      <div data-scene-text className="container-page grid-12 gap-y-14 border-t border-rule pt-10 md:pt-14">
+      <div data-scene-text className="container-page grid-12 items-start gap-y-14 border-t border-rule pt-10 md:pt-14">
         <h2 id="facts-title" className="sr-only">
           In numbers, and the tools I work with
         </h2>
