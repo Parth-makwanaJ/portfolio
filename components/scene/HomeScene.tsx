@@ -4,13 +4,14 @@
  * The fixed canvas behind the home page. Starts the scroll/pointer input at once (it also drives the
  * pinned services). Until the scene starts, a still of the particle field is drawn into a 2D canvas
  * (a canvas is never the LCP element, so it can't compete with the headline). three.js and the scene
- * load when the start gate opens: idle after load, or the first scroll or pointer move.
+ * load when the start gate opens: on desktop idle after load or the first input; on phones only the
+ * first touch or scroll.
  * Unmounting (leaving the home page) disposes the WebGL context: inner pages never run live WebGL.
  */
 
 import { useEffect, useRef } from "react";
 import { startSceneInput } from "@/components/scene/input";
-import { whenStartAllowed } from "@/lib/motion/start-gate";
+import { isPhone, whenInteracted, whenStartAllowed } from "@/lib/motion/start-gate";
 
 /** Draws the still (cover-fit) once the page has loaded, fetched at low priority. */
 function drawStill(container: HTMLElement) {
@@ -51,10 +52,13 @@ export function HomeScene() {
     };
     if (document.readyState === "complete") still();
     else window.addEventListener("load", still, { once: true });
-    whenStartAllowed(
+    // Desktop: on idle (or first input), with the opening animation. Phones: nothing is downloaded
+    // until the first touch or scroll; the live scene then fades in over the still, core already formed.
+    const phone = isPhone();
+    (phone ? whenInteracted : whenStartAllowed)(
       () =>
         void import("@/components/scene/scene").then(({ mountScene }) => {
-          if (!cancelled && ref.current) dispose = mountScene(ref.current);
+          if (!cancelled && ref.current) dispose = mountScene(ref.current, { skipIntro: phone });
         }),
     );
     return () => {

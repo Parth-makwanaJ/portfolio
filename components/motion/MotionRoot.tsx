@@ -9,7 +9,7 @@
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { whenStartAllowed } from "@/lib/motion/start-gate";
+import { isPhone, whenInteracted, whenStartAllowed } from "@/lib/motion/start-gate";
 
 type Runtime = typeof import("@/lib/motion/runtime");
 
@@ -35,7 +35,9 @@ export function MotionRoot() {
         if (!cancelled) cleanup = m.initPage();
       });
     if (runtime) go();
-    else whenStartAllowed(go);
+    // Phones: the first screen needs nothing from GSAP (the hero is never animated and there is no
+    // smooth scrolling or cursor), so it all starts on the first touch or scroll.
+    else (isPhone() ? whenInteracted : whenStartAllowed)(go);
     return () => {
       cancelled = true;
       cleanup?.();

@@ -85,7 +85,11 @@ function buildParticles(n: number) {
   return { geometry: g, count };
 }
 
-export function mountScene(container: HTMLElement): () => void {
+/**
+ * skipIntro: start with the core already formed (phones, where the live scene fades in over the still
+ * of that same state, so there is no jump).
+ */
+export function mountScene(container: HTMLElement, { skipIntro = false }: { skipIntro?: boolean } = {}): () => void {
   if (!webglAvailable()) {
     container.dataset.scene = "static-image";
     return () => delete container.dataset.scene;
@@ -268,7 +272,7 @@ export function mountScene(container: HTMLElement): () => void {
     u.uTime.value += dt;
 
     timeline.s = damp(timeline.s, target(), 5, dt);
-    timeline.intro = smooth(0.3, 2.6, elapsed);
+    timeline.intro = skipIntro ? 1 : smooth(0.3, 2.6, elapsed);
     apply(timeline.s, dt);
 
     renderer.render(scene, camera);
