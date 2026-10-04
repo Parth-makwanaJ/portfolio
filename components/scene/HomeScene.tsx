@@ -10,7 +10,7 @@
 import { useEffect, useRef } from "react";
 import { startSceneInput } from "@/components/scene/input";
 
-export function HomeScene({ projects }: { projects: string[] }) {
+export function HomeScene() {
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -42,7 +42,6 @@ export function HomeScene({ projects }: { projects: string[] }) {
     <div
       ref={ref}
       aria-hidden="true"
-      data-projects={projects.join(",")}
       className="pointer-events-none fixed inset-x-0 top-0 -z-10 h-lvh bg-bg bg-cover bg-center data-[scene=static-image]:bg-[url(/scene/static-wide.webp)] max-md:data-[scene=static-image]:bg-[url(/scene/static-tall.webp)]"
     />
   );

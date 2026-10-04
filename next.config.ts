@@ -28,6 +28,11 @@ const nextConfig: NextConfig = {
   async headers() {
     return [
       {
+        // Self-hosted fonts (app/globals.css). Rename the file if a font ever changes.
+        source: "/fonts/:file*",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
         source: "/icon.png",
         headers: [
           {

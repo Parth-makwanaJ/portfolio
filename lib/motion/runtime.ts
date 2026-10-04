@@ -35,6 +35,13 @@ export function start() {
     startCursor();
   }
   void document.fonts?.ready.then(() => ScrollTrigger.refresh());
+  // The page height changes as fonts and images arrive, or when the services switch between pinned
+  // and stacked: measure the triggers again once it settles.
+  let t = 0;
+  new ResizeObserver(() => {
+    window.clearTimeout(t);
+    t = window.setTimeout(() => ScrollTrigger.refresh(), 200);
+  }).observe(document.body);
 }
 
 /** Sets up the current page's scroll effects. Returns the cleanup for the next navigation. */

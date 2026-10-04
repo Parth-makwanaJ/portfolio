@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
+import { ProjectFrame } from "@/components/ProjectFrame";
 import { featuredProjects, projects } from "@/content/site";
 
 /**
- * Selected work. The project names are plain HTML, one link per case study. The scene shows the
- * project images behind glass slices on the right (top on phones); hovering or focusing a project
- * brings its image forward (data-project-index, read by the scene input).
+ * Selected work: the project names (one link per case study) and a stack of their screenshots as
+ * plain images. Hovering or keyboard-focusing a project brings its screenshot to the front (CSS
+ * :has(), see .work-card in globals.css). The particles thin out and move back at this stop.
  */
 export function SelectedWork() {
   const featured = featuredProjects().slice(0, 4);
@@ -14,10 +15,10 @@ export function SelectedWork() {
       id="work"
       data-stop-mark="5"
       aria-labelledby="work-title"
-      className="relative flex min-h-svh flex-col justify-center pt-[38svh] pb-20 md:py-20"
+      className="work relative flex flex-col justify-center py-(--section-space) md:min-h-svh md:py-24"
     >
-      <div className="container-page">
-        <div className="md:w-[52%]">
+      <div className="container-page grid-12 items-center gap-y-12">
+        <div className="col-span-4 md:col-span-6">
           <div data-scene-text>
             <p className="label text-fg-muted">Selected work</p>
             <h2 id="work-title" data-reveal className="mt-4 text-h2">
@@ -55,6 +56,15 @@ export function SelectedWork() {
               aria-hidden="true"
             />
           </Link>
+        </div>
+
+        {/* The screenshots repeat what the links above say, so the stack is hidden from assistive tech. */}
+        <div aria-hidden="true" className="relative col-span-4 aspect-[3/2] max-md:order-first md:col-span-6">
+          {featured.map((p, i) => (
+            <div key={p.slug} data-work-image={i} className="work-card absolute w-[78%]" style={{ "--i": i } as React.CSSProperties}>
+              <ProjectFrame image={{ ...p.image, alt: "" }} sizes="(min-width: 768px) 38vw, 74vw" />
+            </div>
+          ))}
         </div>
       </div>
     </section>

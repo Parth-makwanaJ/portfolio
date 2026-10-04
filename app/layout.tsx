@@ -1,28 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Instrument_Serif } from "next/font/google";
+import { preload } from "react-dom";
 import "./globals.css";
 import { Header } from "@/components/site/Header";
 import { Footer } from "@/components/site/Footer";
 import { MotionRoot } from "@/components/motion/MotionRoot";
 import { imageCdn, site } from "@/content/site";
-import { cn } from "@/lib/utils";
-
-// display "optional": the font is used if it arrives within ~100ms (it is preloaded), otherwise the
-// size-adjusted fallback stays for that page view. Text never re-flows, so no layout shift and
-// the headline (the LCP element) is never held back by the font.
-const display = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-  display: "optional",
-});
-
-const sans = Geist({
-  subsets: ["latin"],
-  variable: "--font-geist",
-  display: "optional",
-});
 
 // Marks JS as available before paint, so effects only ever hide content when JS is running.
 const jsScript = "document.documentElement.classList.add('js')";
@@ -46,8 +28,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // The headline face is fetched with the HTML, before the CSS asks for it. Geist is requested by the
+  // inlined CSS straight away; preloading it too only took bandwidth from the headline font.
+  preload("/fonts/instrument-serif-latin-400.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
   return (
-    <html lang="en" className={cn(display.variable, sans.variable)} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="preconnect" href={imageCdn.resizer} />
         <link rel="dns-prefetch" href={imageCdn.resizer} />

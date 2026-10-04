@@ -8,7 +8,7 @@ import { Faq } from "@/components/home/Faq";
 import { FinalCta } from "@/components/home/FinalCta";
 import { HomeScene } from "@/components/scene/HomeScene";
 import { JsonLd } from "@/components/site/JsonLd";
-import { featuredProjects, testimonials, visibleFaqs } from "@/content/site";
+import { testimonials, visibleFaqs } from "@/content/site";
 import { pageMetadata } from "@/lib/seo";
 import { personSchema, professionalServiceSchema, websiteSchema } from "@/lib/schema";
 
@@ -25,7 +25,7 @@ export default function Home() {
 
   return (
     <>
-      <HomeScene projects={featuredProjects().slice(0, 4).map((p) => p.slug)} />
+      <HomeScene />
       <Hero />
       <Services />
       <SelectedWork />

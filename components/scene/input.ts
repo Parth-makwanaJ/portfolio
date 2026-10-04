@@ -16,8 +16,6 @@ export const sceneInput = {
   pointer: { x: 0, y: 0 },
   /** performance.now() of the last mouse move. */
   pointerAt: -1e9,
-  /** Featured project under the pointer or keyboard focus at the work stop, -1 for none. */
-  hover: -1,
   /** performance.now() of the last scroll. */
   scrollAt: 0,
   reduced: false,
@@ -33,13 +31,30 @@ let stageCount: HTMLElement | null = null;
 let processList: HTMLElement | null = null;
 let lastStep = -1;
 
+/**
+ * Pinned services must fit the screen. Re-checked on every measure: if the stage content is taller
+ * than the stage, the track falls back to stacked blocks ([data-flow]) so nothing spills into the
+ * next section. Checked without the fallback first, so a larger screen can pin again.
+ */
+function fitServices() {
+  const track = document.querySelector<HTMLElement>(".services-track");
+  const stage = track?.querySelector<HTMLElement>("[data-services-stage]");
+  if (!track || !stage) return;
+  delete track.dataset.flow;
+  if (getComputedStyle(stage).position !== "sticky") return;
+  const inner = stage.firstElementChild as HTMLElement | null;
+  if (inner && inner.scrollHeight > stage.clientHeight + 1) track.dataset.flow = "";
+}
+
 function measure() {
+  fitServices();
   const vh = window.innerHeight;
   const max = Math.max(0, document.documentElement.scrollHeight - vh);
   const y = window.scrollY;
   const next: number[] = [];
   for (let k = 0; k < N_STOPS; k++) {
-    const el = document.querySelector<HTMLElement>(`[data-stop-mark="${k}"]`);
+    // The first marker for this state that is laid out (pinned and stacked layouts use different ones).
+    const el = Array.from(document.querySelectorAll<HTMLElement>(`[data-stop-mark="${k}"]`)).find((e) => e.getClientRects().length > 0);
     if (!el) {
       next.push(next.length ? next[next.length - 1] + 1 : 0);
       continue;
@@ -119,12 +134,6 @@ function listen() {
     sceneInput.pointer.y = -((e.clientY / window.innerHeight) * 2 - 1);
     sceneInput.pointerAt = performance.now();
   };
-  const projectIndex = (t: EventTarget | null) => {
-    const el = t instanceof Element ? t.closest<HTMLElement>("[data-project-index]") : null;
-    return el ? Number(el.dataset.projectIndex) : -1;
-  };
-  const onOver = (e: Event) => (sceneInput.hover = projectIndex(e.target));
-  const onFocusOut = () => (sceneInput.hover = -1);
 
   sync();
   remeasure();
@@ -133,20 +142,19 @@ function listen() {
   ro.observe(document.body);
   window.addEventListener("scroll", onScroll, { passive: true });
   window.addEventListener("resize", remeasure);
+  window.addEventListener("orientationchange", remeasure);
+  window.addEventListener("load", remeasure);
+  void document.fonts?.ready.then(remeasure);
   window.addEventListener("pointermove", onPointer, { passive: true });
-  document.addEventListener("pointerover", onOver, { passive: true });
-  document.addEventListener("focusin", onOver);
-  document.addEventListener("focusout", onFocusOut);
   mqReduce.addEventListener("change", sync);
   mqMobile.addEventListener("change", sync);
   return () => {
     ro.disconnect();
     window.removeEventListener("scroll", onScroll);
     window.removeEventListener("resize", remeasure);
+    window.removeEventListener("orientationchange", remeasure);
+    window.removeEventListener("load", remeasure);
     window.removeEventListener("pointermove", onPointer);
-    document.removeEventListener("pointerover", onOver);
-    document.removeEventListener("focusin", onOver);
-    document.removeEventListener("focusout", onFocusOut);
     mqReduce.removeEventListener("change", sync);
     mqMobile.removeEventListener("change", sync);
     lastStep = -1;

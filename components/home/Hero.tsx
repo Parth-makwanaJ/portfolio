@@ -19,12 +19,12 @@ export function Hero() {
           <p className="label text-fg-muted">
             {profile.name} · {profile.jobTitle} · {profile.location.city}
           </p>
-          <h1 id="hero-title" className="mt-[clamp(1rem,3svh,1.75rem)] max-w-[16ch] text-display">
+          <h1 id="hero-title" className="mt-[clamp(1rem,3svh,1.75rem)] max-w-[7.36em] text-display">
             {profile.headline}
           </h1>
         </div>
         <div className="mt-[clamp(1.5rem,4.5svh,3rem)] flex flex-col gap-7 md:flex-row md:items-end md:justify-between md:gap-12">
-          <p data-scene-text className="max-w-[44ch] text-lead text-fg-muted">
+          <p data-scene-text className="max-w-[29.2em] text-lead text-fg-muted">
             {profile.intro}
           </p>
           <div data-scene-text className="flex flex-col gap-3 sm:flex-row">
