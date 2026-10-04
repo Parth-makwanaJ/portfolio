@@ -18,8 +18,8 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   const all = [{ name: "Home", href: "/" }, ...items];
   return (
     <>
-      <Breadcrumb className="container-page pt-6 md:pt-8">
-        <BreadcrumbList className="label gap-2 text-fg-subtle sm:gap-2">
+      <Breadcrumb className="container-page pt-8 md:pt-12">
+        <BreadcrumbList className="label gap-2 text-fg-muted sm:gap-2">
           {all.map((c, i) => {
             const last = i === all.length - 1;
             return (

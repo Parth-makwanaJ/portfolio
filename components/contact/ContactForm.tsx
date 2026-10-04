@@ -7,8 +7,9 @@ import { cx } from "@/lib/cx";
 
 const initial: ContactState = { status: "idle" };
 
+// Underlined fields: the line turns lime on focus, the error colour when invalid.
 const fieldClass =
-  "mt-2 block w-full border border-rule-strong bg-bg px-3 py-3 text-body outline-none transition-colors duration-(--dur-fast) ease-brand focus-visible:border-signal aria-invalid:border-signal";
+  "mt-1 block w-full border-0 border-b border-rule-strong bg-transparent px-0 py-3 text-lead outline-none transition-colors duration-(--dur-fast) ease-brand focus-visible:border-signal aria-invalid:border-destructive";
 
 export function ContactForm({ projectTypes, budgets }: { projectTypes: string[]; budgets: string[] }) {
   const [state, action, pending] = useActionState(sendContact, initial);
@@ -23,9 +24,9 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
 
   if (state.status === "success") {
     return (
-      <div ref={successRef} tabIndex={-1} role="status" className="border border-rule-strong p-6 outline-none md:p-8">
-        <p className="label text-fg-subtle">Sent</p>
-        <p className="mt-3 text-h3">Thanks. Your message is on its way.</p>
+      <div ref={successRef} tabIndex={-1} role="status" className="border-t border-rule pt-8 outline-none">
+        <p className="label text-fg-muted">Sent</p>
+        <p className="mt-4 font-display text-h3">Thanks. Your message is on its way.</p>
         <p className="mt-3 text-fg-muted">I will reply to the email address you gave.</p>
       </div>
     );
@@ -35,22 +36,22 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
   const e = state.errors ?? {};
   const err = (k: keyof NonNullable<ContactState["errors"]>) =>
     e[k] ? (
-      <p id={`${k}-error`} className="mt-2 text-small text-signal">
+      <p id={`${k}-error`} className="mt-2 text-small text-destructive">
         {e[k]}
       </p>
     ) : null;
 
   return (
-    <form action={action} noValidate className="space-y-6">
+    <form action={action} noValidate className="space-y-9">
       {state.status === "error" && state.message && (
-        <p ref={errorRef} tabIndex={-1} role="alert" className="border-l-2 border-signal pl-3 text-small outline-none">
+        <p ref={errorRef} tabIndex={-1} role="alert" className="border-l-2 border-destructive pl-3 text-small outline-none">
           {state.message}
         </p>
       )}
 
-      <div className="grid gap-6 sm:grid-cols-2">
+      <div className="grid gap-9 sm:grid-cols-2">
         <div>
-          <label htmlFor="name" className="label text-fg-subtle">
+          <label htmlFor="name" className="text-small text-fg-muted">
             Name
           </label>
           <input
@@ -66,7 +67,7 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
           {err("name")}
         </div>
         <div>
-          <label htmlFor="email" className="label text-fg-subtle">
+          <label htmlFor="email" className="text-small text-fg-muted">
             Email
           </label>
           <input
@@ -84,9 +85,9 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
         </div>
       </div>
 
-      <div className={cx("grid gap-6", budgets.length > 0 && "sm:grid-cols-2")}>
+      <div className={cx("grid gap-9", budgets.length > 0 && "sm:grid-cols-2")}>
         <div>
-          <label htmlFor="projectType" className="label text-fg-subtle">
+          <label htmlFor="projectType" className="text-small text-fg-muted">
             Project type
           </label>
           <div className="relative">
@@ -97,7 +98,7 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
               defaultValue={v.projectType ?? ""}
               aria-invalid={!!e.projectType}
               aria-describedby={e.projectType ? "projectType-error" : undefined}
-              className={cx(fieldClass, "appearance-none pr-10")}
+              className={cx(fieldClass, "appearance-none pr-8 [&>option]:bg-surface")}
             >
               <option value="" disabled>
                 Choose one
@@ -106,13 +107,13 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
                 <option key={t}>{t}</option>
               ))}
             </select>
-              <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
+              <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-0 size-4 -translate-y-1/2 text-fg-muted" />
           </div>
           {err("projectType")}
         </div>
         {budgets.length > 0 && (
           <div>
-            <label htmlFor="budget" className="label text-fg-subtle">
+            <label htmlFor="budget" className="text-small text-fg-muted">
               Budget range
             </label>
             <div className="relative">
@@ -123,7 +124,7 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
                 defaultValue={v.budget ?? ""}
                 aria-invalid={!!e.budget}
                 aria-describedby={e.budget ? "budget-error" : undefined}
-                className={cx(fieldClass, "appearance-none pr-10")}
+                className={cx(fieldClass, "appearance-none pr-8 [&>option]:bg-surface")}
               >
                 <option value="" disabled>
                   Choose one
@@ -132,7 +133,7 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
                   <option key={b}>{b}</option>
                 ))}
               </select>
-                <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-3 size-4 -translate-y-1/2" />
+                <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-0 size-4 -translate-y-1/2 text-fg-muted" />
             </div>
             {err("budget")}
           </div>
@@ -140,7 +141,7 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
       </div>
 
       <div>
-        <label htmlFor="message" className="label text-fg-subtle">
+        <label htmlFor="message" className="text-small text-fg-muted">
           About the project
         </label>
         <textarea
@@ -169,7 +170,7 @@ export function ContactForm({ projectTypes, budgets }: { projectTypes: string[];
       <button
         type="submit"
         disabled={pending}
-        className="group inline-flex h-12 w-full items-center justify-between gap-6 bg-signal px-5 font-medium text-on-signal transition-opacity duration-(--dur-fast) ease-brand hover:opacity-90 disabled:opacity-60 sm:w-auto"
+        className="group btn btn-primary h-14 w-full gap-4 px-7 text-base disabled:opacity-60 sm:w-auto"
       >
         {pending ? "Sending…" : "Send message"}
         <ArrowRight className="size-4" aria-hidden="true" />

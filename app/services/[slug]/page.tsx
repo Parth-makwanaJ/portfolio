@@ -30,9 +30,6 @@ export default async function ServicePage({ params }: Props) {
   if (!service) notFound();
   const related = projectsForService(service.slug);
 
-  let n = 0;
-  const num = () => String(++n).padStart(2, "0");
-
   return (
     <>
       <Breadcrumbs
@@ -42,35 +39,35 @@ export default async function ServicePage({ params }: Props) {
         ]}
       />
 
-      <header className="container-page grid-12 gap-y-8 pt-10 md:pt-16">
-        <div className="col-span-4 md:col-span-9">
-          <p className="label text-fg-subtle">Service</p>
-          <h1 className="mt-4 text-h1">{service.name}</h1>
-          <p className="mt-6 max-w-[52ch] text-lead text-fg-muted">{service.summary}</p>
-        </div>
-        <div className="col-span-4 self-end md:col-span-3">
-          <MagneticButton href="/contact">Start a project</MagneticButton>
+      <header className="container-page pt-12 md:pt-20">
+        <p className="label text-fg-muted">Service</p>
+        <h1 className="mt-5 max-w-[14ch] text-h1">{service.name}</h1>
+        <div className="mt-8 flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <p className="max-w-[52ch] text-lead text-fg-muted">{service.summary}</p>
+          <MagneticButton href="/contact" className="w-fit">
+            Start a project
+          </MagneticButton>
         </div>
       </header>
 
-      <div className="section-space space-y-16 md:space-y-24">
+      <div className="space-y-(--section-space) py-(--section-space)">
         <section aria-labelledby="included-title">
-          <SectionHeader number={num()} label="Included" id="included-title" title="What is included" />
-          <ul className="container-page mt-10 grid grid-cols-1 border-t border-l border-rule-strong sm:grid-cols-2 lg:grid-cols-3">
-            {service.included.map((item, i) => (
-              <li key={item} className="flex min-h-36 flex-col justify-between gap-6 border-r border-b border-rule-strong p-5 md:p-6">
-                <span className="label text-fg-subtle">{String(i + 1).padStart(2, "0")}</span>
-                <span className="text-lead">{item}</span>
+          <SectionHeader label="Included" id="included-title" title="What is included" />
+          <ul className="container-page mt-12 grid grid-cols-1 gap-x-(--grid-gap) md:grid-cols-2">
+            {service.included.map((item) => (
+              <li key={item} className="flex gap-4 border-t border-rule py-6 text-lead">
+                <span aria-hidden="true" className="mt-[0.8em] h-px w-4 shrink-0 bg-fg-muted" />
+                {item}
               </li>
             ))}
           </ul>
         </section>
 
         <section aria-labelledby="for-title">
-          <SectionHeader number={num()} label="Who it is for" id="for-title" title="Who it is for" />
-          <ul className="container-page grid-12 mt-10">
+          <SectionHeader label="Who it is for" id="for-title" title="Who it is for" />
+          <ul className="container-page mt-12">
             {service.forWho.map((w) => (
-              <li key={w} className="col-span-4 border-t border-rule py-4 text-lead md:col-span-9 md:col-start-4">
+              <li key={w} className="border-t border-rule py-6 font-display text-h3 last:border-b">
                 {w}
               </li>
             ))}
@@ -79,11 +76,11 @@ export default async function ServicePage({ params }: Props) {
 
         {related.length > 0 && (
           <section aria-labelledby="related-title">
-            <SectionHeader number={num()} label="Projects" id="related-title" title={`${service.name} projects`} />
-            <ul className="container-page mt-10 grid grid-cols-1 border-t border-l border-rule-strong sm:grid-cols-2 lg:grid-cols-3">
-              {related.map((p, i) => (
-                <li key={p.slug} className="border-r border-b border-rule-strong">
-                  <ProjectCard project={p} index={i} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" />
+            <SectionHeader label="Projects" id="related-title" title={`${service.name} projects`} />
+            <ul className="container-page mt-12 grid grid-cols-1 gap-x-(--grid-gap) gap-y-16 md:mt-16 md:grid-cols-2">
+              {related.map((p) => (
+                <li key={p.slug}>
+                  <ProjectCard project={p} sizes="(min-width: 768px) 45vw, 100vw" />
                 </li>
               ))}
             </ul>

@@ -2,21 +2,21 @@ import { readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { ImageResponse } from "next/og";
 
-/** Shared Open Graph image (1200x630) in the Swiss style: grid, heavy headline, one red mark. */
+/** Shared Open Graph image (1200x630): warm near-black, serif headline, one lime mark. */
 export const ogSize = { width: 1200, height: 630 };
 export const ogContentType = "image/png";
 
 const fontDir = join(process.cwd(), "assets/fonts");
 
 export async function renderOg({ eyebrow, title, footer }: { eyebrow: string; title: string; footer?: string }) {
-  const [heavy, regular, mono] = await Promise.all([
-    readFile(join(fontDir, "inter-tight-latin-800-normal.woff")),
-    readFile(join(fontDir, "inter-tight-latin-400-normal.woff")),
-    readFile(join(fontDir, "ibm-plex-mono-latin-400-normal.woff")),
+  const [serif, regular, medium] = await Promise.all([
+    readFile(join(fontDir, "instrument-serif-latin-400-normal.woff")),
+    readFile(join(fontDir, "geist-sans-latin-400-normal.woff")),
+    readFile(join(fontDir, "geist-sans-latin-500-normal.woff")),
   ]);
 
   // Long titles step down in size so they always fit in three lines.
-  const size = title.length > 48 ? 76 : title.length > 28 ? 92 : 112;
+  const size = title.length > 48 ? 84 : title.length > 28 ? 104 : 124;
 
   return new ImageResponse(
     (
@@ -27,53 +27,53 @@ export async function renderOg({ eyebrow, title, footer }: { eyebrow: string; ti
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#ffffff",
-          color: "#111111",
-          padding: "56px 64px",
-          position: "relative",
-          fontFamily: "Inter Tight",
+          background: "#0D0C0B",
+          color: "#EDE7DD",
+          padding: "60px 68px",
+          fontFamily: "Geist",
         }}
       >
-        {/* 12-column grid lines */}
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", padding: "0 64px", gap: 20 }}>
-          {Array.from({ length: 12 }, (_, i) => (
-            <div key={i} style={{ flex: 1, borderLeft: "1px solid #ececec", borderRight: i === 11 ? "1px solid #ececec" : "none" }} />
-          ))}
-        </div>
-
         <div
           style={{
             display: "flex",
             justifyContent: "space-between",
-            borderTop: "2px solid #111111",
-            paddingTop: 14,
-            fontFamily: "IBM Plex Mono",
-            fontSize: 22,
+            fontSize: 20,
+            fontWeight: 500,
             textTransform: "uppercase",
-            letterSpacing: 1,
+            letterSpacing: 2.8,
+            color: "#9C9488",
           }}
         >
-          <span>Parth Makwana</span>
-          <span style={{ color: "#555555" }}>{eyebrow}</span>
+          <span style={{ color: "#EDE7DD" }}>Parth Makwana</span>
+          <span>{eyebrow}</span>
         </div>
 
         <div
           style={{
             display: "flex",
+            fontFamily: "Instrument Serif",
             fontSize: size,
-            fontWeight: 800,
-            lineHeight: 0.92,
-            letterSpacing: -size * 0.045,
+            lineHeight: 0.98,
+            letterSpacing: -size * 0.015,
             maxWidth: 1000,
           }}
         >
           {title}
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 26 }}>
-          <span style={{ color: "#555555", fontWeight: 400 }}>{footer ?? "Shopify · Laravel · Node.js · Speed · SEO"}</span>
-          <div style={{ display: "flex", alignItems: "center", gap: 16, fontFamily: "IBM Plex Mono", fontSize: 22 }}>
-            <div style={{ width: 28, height: 28, background: "#E30613" }} />
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            fontSize: 24,
+            borderTop: "1px solid rgba(237,231,221,0.16)",
+            paddingTop: 26,
+          }}
+        >
+          <span style={{ color: "#9C9488" }}>{footer ?? "Shopify · Laravel · Node.js · Speed · SEO"}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+            <div style={{ width: 14, height: 14, borderRadius: 14, background: "#D4FF3A" }} />
             parthdev.co.in
           </div>
         </div>
@@ -82,9 +82,9 @@ export async function renderOg({ eyebrow, title, footer }: { eyebrow: string; ti
     {
       ...ogSize,
       fonts: [
-        { name: "Inter Tight", data: heavy, weight: 800, style: "normal" },
-        { name: "Inter Tight", data: regular, weight: 400, style: "normal" },
-        { name: "IBM Plex Mono", data: mono, weight: 400, style: "normal" },
+        { name: "Instrument Serif", data: serif, weight: 400, style: "normal" },
+        { name: "Geist", data: regular, weight: 400, style: "normal" },
+        { name: "Geist", data: medium, weight: 500, style: "normal" },
       ],
     },
   );

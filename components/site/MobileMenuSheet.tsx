@@ -2,7 +2,7 @@
 
 /**
  * The open mobile menu: shadcn/ui Sheet (Radix Dialog) for focus trapping, Escape to close and
- * aria-modal. Restyled to the Swiss tokens: full-screen, square, 1px rules, numbered links.
+ * aria-modal. Full-screen, dark, large serif links.
  * Loaded on demand by MobileMenu, so Radix is not in the initial JavaScript.
  */
 
@@ -35,19 +35,19 @@ export default function MobileMenuSheet({
           e.preventDefault();
           returnFocus();
         }}
-        className="w-full gap-0 border-l border-rule-strong bg-bg p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-none"
+        className="w-full gap-0 border-0 bg-bg p-0 data-[side=right]:w-full data-[side=right]:sm:max-w-none"
       >
-        <div className="flex h-14 items-center justify-between border-b border-rule-strong px-(--gutter)">
-          <SheetTitle className="label">Menu</SheetTitle>
+        <div className="flex h-16 items-center justify-between border-b border-rule px-(--gutter)">
+          <SheetTitle className="label font-sans text-fg-muted">Menu</SheetTitle>
           <SheetDescription className="sr-only">Site navigation</SheetDescription>
-          <SheetClose aria-label="Close menu" className="grid size-11 place-items-center border border-rule-strong">
+          <SheetClose aria-label="Close menu" className="grid size-11 place-items-center rounded-full shadow-[inset_0_0_0_1px_var(--rule-strong)]">
             <X className="size-4" aria-hidden="true" />
           </SheetClose>
         </div>
 
-        <nav aria-label="Mobile" className="px-(--gutter)">
+        <nav aria-label="Mobile" className="px-(--gutter) pt-4">
           <ol>
-            {links.map((l, i) => {
+            {links.map((l) => {
               const active = pathname === l.href || pathname.startsWith(`${l.href}/`);
               return (
                 <li key={l.href} className="border-b border-rule">
@@ -55,10 +55,10 @@ export default function MobileMenuSheet({
                     href={l.href}
                     onClick={() => setOpen(false)}
                     aria-current={active ? "page" : undefined}
-                    className="flex items-baseline gap-4 py-5"
+                    className="flex items-center gap-4 py-4"
                   >
-                    <span className="label text-fg-subtle">{String(i + 1).padStart(2, "0")}</span>
-                    <span className={`text-h2 ${active ? "text-signal" : ""}`}>{l.label}</span>
+                    <span className="font-display text-h2">{l.label}</span>
+                    {active && <span aria-hidden="true" className="size-2 rounded-full bg-signal" />}
                   </Link>
                 </li>
               );
@@ -66,15 +66,15 @@ export default function MobileMenuSheet({
           </ol>
         </nav>
 
-        <div className="mt-auto space-y-4 border-t border-rule-strong p-(--gutter)">
+        <div className="mt-auto space-y-5 p-(--gutter) pb-8">
           <Link
             href="/contact"
             onClick={() => setOpen(false)}
-            className="flex h-12 items-center justify-center bg-signal font-medium text-on-signal"
+            className="btn btn-primary h-14 w-full text-base"
           >
             Start a project
           </Link>
-          <a href={`mailto:${email}`} className="block text-small text-fg-muted underline underline-offset-4">
+          <a href={`mailto:${email}`} className="block text-small text-fg-muted link-line">
             {email}
           </a>
         </div>

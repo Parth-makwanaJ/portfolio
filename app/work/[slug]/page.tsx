@@ -7,7 +7,6 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { ProjectFrame } from "@/components/ProjectFrame";
 import { ProjectCard } from "@/components/ProjectCard";
 import { VideoShowcase } from "@/components/VideoShowcase";
-import { RevealText } from "@/components/motion/RevealText";
 import { FinalCta } from "@/components/home/FinalCta";
 import { getProject, getService, imageUrl, nextProject, profile, projects, site } from "@/content/site";
 import { pageMetadata } from "@/lib/seo";
@@ -41,9 +40,38 @@ export default async function CaseStudy({ params }: Props) {
   const next = nextProject(project.slug);
   const host = project.live ? new URL(project.live).hostname.replace(/^www\./, "") : null;
 
-  // Number only the sections that render.
-  let n = 0;
-  const num = () => String(++n).padStart(2, "0");
+  const details = [
+    {
+      k: "Services",
+      v: (
+        <ul className="space-y-1">
+          {services.map((s) => (
+            <li key={s.slug}>
+              <Link href={`/services/${s.slug}`} className="link-line">
+                {s.name}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      ),
+    },
+    { k: "Stack", v: project.stack.join(", ") },
+    ...(project.engagement ? [{ k: "Context", v: project.engagement }] : []),
+    ...(project.live && host
+      ? [
+          {
+            k: "Live site",
+            v: (
+              <a href={project.live} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 link-line">
+                {host}
+                <ArrowUpRight className="size-3.5" aria-hidden="true" />
+                <span className="sr-only">(opens in a new tab)</span>
+              </a>
+            ),
+          },
+        ]
+      : []),
+  ];
 
   return (
     <>
@@ -55,136 +83,90 @@ export default async function CaseStudy({ params }: Props) {
       />
 
       <article aria-labelledby="case-title">
-        <header className="container-page grid-12 gap-y-8 pt-10 md:pt-16">
-          <div className="col-span-4 md:col-span-8">
-            <p className="label text-fg-subtle">Case study · {project.category}</p>
-            <h1 id="case-title" className="mt-4 text-h1">
-              {project.name}
-            </h1>
-            <p className="mt-6 max-w-[48ch] text-lead text-fg-muted">{project.summary}</p>
-          </div>
-
-          <dl className="col-span-4 self-end border-t border-rule-strong text-small md:col-span-4">
-            {[
-              {
-                k: "Services",
-                v: (
-                  <ul>
-                    {services.map((s) => (
-                      <li key={s.slug}>
-                        <Link href={`/services/${s.slug}`} className="underline underline-offset-4 hover:text-signal">
-                          {s.name}
-                        </Link>
-                      </li>
-                    ))}
-                  </ul>
-                ),
-              },
-              { k: "Stack", v: project.stack.join(", ") },
-              ...(project.engagement ? [{ k: "Context", v: project.engagement }] : []),
-              ...(project.live && host
-                ? [
-                    {
-                      k: "Live site",
-                      v: (
-                        <a
-                          href={project.live}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="inline-flex items-center gap-1 underline underline-offset-4 hover:text-signal"
-                        >
-                          {host}
-                          <ArrowUpRight className="size-3.5" aria-hidden="true" />
-                          <span className="sr-only">(opens in a new tab)</span>
-                        </a>
-                      ),
-                    },
-                  ]
-                : []),
-            ].map((row) => (
-              <div key={row.k} className="grid grid-cols-[6rem_1fr] gap-4 border-b border-rule py-3">
-                <dt className="label pt-0.5 text-fg-subtle">{row.k}</dt>
-                <dd>{row.v}</dd>
-              </div>
-            ))}
-          </dl>
+        <header className="container-page pt-12 md:pt-20">
+          <p className="label text-fg-muted">Case study · {project.category}</p>
+          <h1 id="case-title" className="mt-5 max-w-[14ch] text-h1">
+            {project.name}
+          </h1>
+          <p className="mt-6 max-w-[48ch] text-lead text-fg-muted">{project.summary}</p>
         </header>
 
         <div className="container-page mt-12 md:mt-16">
           {project.video ? (
-            <VideoShowcase
-              mp4={project.video.mp4}
-              webm={project.video.webm}
-              poster={project.video.poster}
-              label={project.video.label}
-            />
+            <VideoShowcase mp4={project.video.mp4} webm={project.video.webm} poster={project.video.poster} label={project.video.label} />
           ) : (
-            <ProjectFrame image={project.image} sizes="(min-width: 1440px) 1360px, 100vw" preload />
+            <ProjectFrame image={project.image} sizes="(min-width: 1472px) 1376px, 100vw" preload />
           )}
         </div>
 
-        <div className="section-space space-y-16 md:space-y-24">
-          <section aria-labelledby="need-title" className="container-page grid-12 gap-y-4 border-t border-rule-strong pt-4">
-            <p className="label col-span-4 text-fg-subtle md:col-span-3">
-              <span className="text-fg">{num()}</span> &nbsp; The need
-            </p>
-            <div className="col-span-4 md:col-span-9">
-              <RevealText id="need-title" text="What the client needed" className="text-h2" />
-              <p className="mt-6 max-w-[52ch] text-lead">{project.need}</p>
-            </div>
-          </section>
+        <div className="container-page grid-12 gap-y-16 py-(--section-space)">
+          {/* Sticky details column */}
+          <aside aria-label="Project details" className="col-span-4 md:col-span-4">
+            <dl className="border-t border-rule text-small md:sticky md:top-24">
+              {details.map((row) => (
+                <div key={row.k} className="grid grid-cols-[6.5rem_1fr] gap-4 border-b border-rule py-4">
+                  <dt className="text-fg-muted">{row.k}</dt>
+                  <dd>{row.v}</dd>
+                </div>
+              ))}
+            </dl>
+          </aside>
 
-          <section aria-labelledby="built-title" className="container-page grid-12 gap-y-4 border-t border-rule-strong pt-4">
-            <p className="label col-span-4 text-fg-subtle md:col-span-3">
-              <span className="text-fg">{num()}</span> &nbsp; The work
-            </p>
-            <div className="col-span-4 md:col-span-9">
-              <RevealText id="built-title" text="What I built" className="text-h2" />
-              <ol className="mt-6 border-t border-rule">
-                {project.built.map((b, i) => (
-                  <li key={b} className="grid grid-cols-[3rem_1fr] border-b border-rule py-4 text-lead">
-                    <span className="label pt-1.5 text-fg-subtle">{String(i + 1).padStart(2, "0")}</span>
+          <div className="col-span-4 space-y-20 md:col-span-7 md:col-start-6 md:space-y-28">
+            <section aria-labelledby="need-title">
+              <p className="label text-fg-muted">The need</p>
+              <h2 id="need-title" data-reveal className="mt-4 text-h2">
+                What the client needed
+              </h2>
+              <p className="mt-6 max-w-[52ch] text-lead">{project.need}</p>
+            </section>
+
+            <section aria-labelledby="built-title">
+              <p className="label text-fg-muted">The work</p>
+              <h2 id="built-title" data-reveal className="mt-4 text-h2">
+                What I built
+              </h2>
+              <ul className="mt-8 border-t border-rule">
+                {project.built.map((b) => (
+                  <li key={b} className="flex gap-4 border-b border-rule py-5 text-lead">
+                    <span aria-hidden="true" className="mt-[0.8em] h-px w-4 shrink-0 bg-fg-muted" />
                     {b}
                   </li>
                 ))}
-              </ol>
-            </div>
-          </section>
-
-          {project.result && (
-            <section aria-labelledby="result-title" className="container-page grid-12 gap-y-4 border-t border-rule-strong pt-4">
-              <p className="label col-span-4 text-fg-subtle md:col-span-3">
-                <span className="text-fg">{num()}</span> &nbsp; Result
-              </p>
-              <div className="col-span-4 md:col-span-9">
-                <RevealText id="result-title" text="The result" className="text-h2" />
-                <p className="mt-6 max-w-[52ch] text-lead">{project.result}</p>
-              </div>
-            </section>
-          )}
-
-          <nav aria-label="Related" className="container-page grid-12 gap-y-8 border-t border-rule-strong pt-4">
-            <div className="col-span-4 md:col-span-5">
-              <p className="label text-fg-subtle">Related service</p>
-              <ul className="mt-4 space-y-3">
-                {services.map((s) => (
-                  <li key={s.slug}>
-                    <Link href={`/services/${s.slug}`} className="group inline-flex items-center gap-3 text-h3 hover:text-signal">
-                      {s.name}
-                      <ArrowRight className="size-5 transition-transform duration-(--dur-fast) ease-brand group-hover:translate-x-1" aria-hidden="true" />
-                    </Link>
-                  </li>
-                ))}
               </ul>
-            </div>
-            <div className="col-span-4 md:col-span-6 md:col-start-7">
-              <p className="label text-fg-subtle">Next project</p>
-              <div className="mt-4 border border-rule-strong">
-                <ProjectCard project={next} sizes="(min-width: 768px) 45vw, 100vw" />
-              </div>
-            </div>
-          </nav>
+            </section>
+
+            {project.result && (
+              <section aria-labelledby="result-title">
+                <p className="label text-fg-muted">Result</p>
+                <h2 id="result-title" data-reveal className="mt-4 text-h2">
+                  The result
+                </h2>
+                <p className="mt-6 max-w-[52ch] text-lead">{project.result}</p>
+              </section>
+            )}
+          </div>
         </div>
+
+        <nav aria-label="Related" className="container-page grid-12 gap-y-14 border-t border-rule pt-12 pb-(--section-space)">
+          <div className="col-span-4 md:col-span-4">
+            <p className="label text-fg-muted">Related service</p>
+            <ul className="mt-5 space-y-3">
+              {services.map((s) => (
+                <li key={s.slug}>
+                  <Link href={`/services/${s.slug}`} className="group inline-flex items-center gap-3 font-display text-h3">
+                    {s.name}
+                    <ArrowRight className="size-5 transition-transform duration-(--dur-fast) ease-brand group-hover:translate-x-1" aria-hidden="true" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="col-span-4 md:col-span-7 md:col-start-6">
+            <p className="label text-fg-muted">Next project</p>
+            <ProjectCard project={next} sizes="(min-width: 768px) 55vw, 100vw" className="mt-5" />
+          </div>
+        </nav>
       </article>
 
       <FinalCta />

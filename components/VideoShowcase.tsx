@@ -46,7 +46,7 @@ export function VideoShowcase({
 
   return (
     <div
-      className={cx("relative overflow-hidden border border-rule-strong bg-surface", className)}
+      className={cx("relative overflow-hidden bg-surface", className)}
       style={{ aspectRatio: `${poster.width} / ${poster.height}` }}
     >
       <Image

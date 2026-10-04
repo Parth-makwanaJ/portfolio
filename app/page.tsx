@@ -1,15 +1,14 @@
 import { Hero } from "@/components/home/Hero";
-import { ClientMarquee } from "@/components/home/ClientMarquee";
-import { ServicesBento } from "@/components/home/ServicesBento";
+import { Services } from "@/components/home/Services";
 import { SelectedWork } from "@/components/home/SelectedWork";
 import { Process } from "@/components/home/Process";
 import { Numbers } from "@/components/home/Numbers";
 import { Testimonials } from "@/components/home/Testimonials";
-import { TechStack } from "@/components/home/TechStack";
 import { Faq } from "@/components/home/Faq";
 import { FinalCta } from "@/components/home/FinalCta";
+import { HomeScene } from "@/components/scene/HomeScene";
 import { JsonLd } from "@/components/site/JsonLd";
-import { testimonials, visibleFaqs } from "@/content/site";
+import { featuredProjects, testimonials, visibleFaqs } from "@/content/site";
 import { pageMetadata } from "@/lib/seo";
 import { personSchema, professionalServiceSchema, websiteSchema } from "@/lib/schema";
 
@@ -22,23 +21,19 @@ export const metadata = pageMetadata({
 });
 
 export default function Home() {
-  // Number only the sections that render, so hidden blocks leave no gaps (01, 02, 03...).
-  let n = 0;
-  const next = () => String(++n).padStart(2, "0");
   const faqs = visibleFaqs();
 
   return (
     <>
+      <HomeScene projects={featuredProjects().slice(0, 4).map((p) => p.slug)} />
       <Hero />
-      <ClientMarquee />
-      <ServicesBento number={next()} />
-      <SelectedWork number={next()} />
-      <Process number={next()} />
+      <Services />
+      <SelectedWork />
+      <Process />
       <Numbers />
-      {testimonials.length > 0 && <Testimonials number={next()} />}
-      <TechStack number={next()} />
-      {faqs.length > 0 && <Faq number={next()} items={faqs} />}
-      <FinalCta />
+      {testimonials.length > 0 && <Testimonials />}
+      {faqs.length > 0 && <Faq items={faqs} />}
+      <FinalCta scene />
       <JsonLd data={[websiteSchema(), personSchema(), professionalServiceSchema()]} />
     </>
   );

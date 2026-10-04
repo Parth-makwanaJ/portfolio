@@ -2,53 +2,48 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@custom-variant dark (&:is(.dark *));
-
 /* ==========================================================================
    Design tokens
-   Direction: Swiss design (International Typographic Style) with bento grids.
-   Light is the default theme (:root); dark is the inverse (.dark).
-   One accent ("signal", a strong red): primary button, links, focus rings,
-   and one highlight per section. Square corners, 1px rules, no shadows,
-   no gradients, no texture.
+   Direction: dark, cinematic, engineered. A warm near-black page, off-white text,
+   one serif display face and one clean text face. One accent (lime) with one job:
+   the primary action, focus, and the particles of the home scene.
+   Dark only: the lime and the particle field do not hold up on a light page.
    ========================================================================== */
 
-:root,
-.light {
-  /* colour: light */
-  --bg: #ffffff;
-  --surface: #f4f4f4;
-  --fg: #111111; /* 18.9:1 on bg */
-  --fg-muted: #555555; /* 7.5:1 on bg */
-  --fg-subtle: #6b6b6b; /* 5.3:1 on bg, 4.9:1 on surface */
-  --rule: #e2e2e2; /* hairlines, cell dividers */
-  --rule-strong: #111111; /* section rules, outlines */
-  --grid-line: color-mix(in srgb, #111111 7%, transparent); /* the visible 12-col grid */
-  --signal: #e30613; /* 4.9:1 on bg */
-  --on-signal: #ffffff; /* 4.9:1 on signal */
+:root {
+  color-scheme: dark;
+
+  /* colour */
+  --bg: #0d0c0b;
+  --surface: #161513;
+  --fg: #ede7dd; /* 15.9:1 on bg */
+  --fg-muted: #9c9488; /* 6.5:1 on bg, 6.0:1 on surface */
+  --rule: color-mix(in srgb, #ede7dd 12%, transparent);
+  --rule-strong: color-mix(in srgb, #ede7dd 24%, transparent);
+  --signal: #d4ff3a; /* lime, 16.9:1 on bg */
+  --on-signal: #0d0c0b; /* 16.9:1 on lime */
 
   /* layout */
-  --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+  --gutter: clamp(1rem, 0.4rem + 2.8vw, 3rem);
   --grid-gap: clamp(1rem, 0.6rem + 1.2vw, 1.5rem);
-  --section-space: clamp(5rem, 3rem + 8vw, 10rem);
-  --container: 90rem;
+  --section-space: clamp(6rem, 3.5rem + 9vw, 12rem);
+  --container: 92rem;
 
-  /* radius: none */
   --radius: 0px;
 
-  /* motion: restrained and precise */
-  --ease-out-brand: cubic-bezier(0.2, 0, 0, 1);
-  --ease-in-brand: cubic-bezier(0.4, 0, 1, 1);
-  --dur-fast: 120ms;
-  --dur-base: 200ms;
-  --dur-slow: 320ms;
+  /* motion */
+  --ease-out-brand: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-brand: cubic-bezier(0.55, 0, 1, 0.45);
+  --dur-fast: 100ms; /* hover, focus */
+  --dur-base: 200ms; /* UI state */
+  --dur-slow: 300ms; /* page transition */
 
   /* shadcn semantic mapping */
   --background: var(--bg);
   --foreground: var(--fg);
-  --card: var(--bg);
+  --card: var(--surface);
   --card-foreground: var(--fg);
-  --popover: var(--bg);
+  --popover: var(--surface);
   --popover-foreground: var(--fg);
   --primary: var(--signal);
   --primary-foreground: var(--on-signal);
@@ -58,36 +53,19 @@
   --muted-foreground: var(--fg-muted);
   --accent: var(--surface);
   --accent-foreground: var(--fg);
-  --destructive: #b42318;
+  --destructive: #ff8a7a;
   --border: var(--rule);
   --input: var(--rule-strong);
   --ring: var(--signal);
 }
 
-.dark {
-  --bg: #0b0b0b;
-  --surface: #161616;
-  --fg: #f2f2f2; /* 17.6:1 on bg */
-  --fg-muted: #a6a6a6; /* 8.1:1 on bg */
-  --fg-subtle: #8f8f8f; /* 6.1:1 on bg, 5.6:1 on surface */
-  --rule: #262626;
-  --rule-strong: #f2f2f2;
-  --grid-line: color-mix(in srgb, #f2f2f2 7%, transparent);
-  --signal: #ff3b30; /* 5.6:1 on bg */
-  --on-signal: #0b0b0b; /* 5.6:1 on signal (white would be 3.6:1) */
-  --destructive: #f97066;
-}
-
 @theme inline {
-  /* colours */
   --color-bg: var(--bg);
   --color-surface: var(--surface);
   --color-fg: var(--fg);
   --color-fg-muted: var(--fg-muted);
-  --color-fg-subtle: var(--fg-subtle);
   --color-rule: var(--rule);
   --color-rule-strong: var(--rule-strong);
-  --color-grid-line: var(--grid-line);
   --color-signal: var(--signal);
   --color-on-signal: var(--on-signal);
 
@@ -110,43 +88,43 @@
   --color-input: var(--input);
   --color-ring: var(--ring);
 
-  /* fonts: one grotesque family for everything, mono only for labels and numbers */
-  --font-sans: var(--font-inter-tight), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-heading: var(--font-inter-tight), "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+  /* fonts: a serif with character for display, a clean grotesque for everything else */
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-instrument-serif), "Iowan Old Style", Georgia, serif;
+  --font-heading: var(--font-display);
 
-  /* type scale (fluid). Weights in use: 400, 500, 800. */
-  /* min() with svh keeps the hero CTA above the fold on short screens (1366x768, 1280x720) */
-  --text-display: clamp(2.75rem, min(1rem + 7.4vw, 0.25rem + 12.5svh), 9.25rem);
-  --text-display--line-height: 0.88;
-  --text-display--letter-spacing: -0.045em;
-  --text-h1: clamp(2.75rem, 1.2rem + 5.6vw, 7rem);
-  --text-h1--line-height: 0.9;
-  --text-h1--letter-spacing: -0.04em;
-  --text-h2: clamp(2.25rem, 1.3rem + 3.8vw, 5rem);
-  --text-h2--line-height: 0.95;
-  --text-h2--letter-spacing: -0.035em;
-  --text-h3: clamp(1.5rem, 1.25rem + 1vw, 2.25rem);
+  /* type scale (fluid). Serif at 400 only; text at 400 and 500. */
+  /* min() with svh keeps the hero buttons above the fold on short screens (1366x768) */
+  --text-display: clamp(3rem, min(1.1rem + 6.6vw, 0.6rem + 11.5svh), 8.75rem);
+  --text-display--line-height: 0.94;
+  --text-display--letter-spacing: -0.02em;
+  --text-mega: clamp(3.5rem, 1rem + 9vw, 11.5rem);
+  --text-mega--line-height: 0.9;
+  --text-mega--letter-spacing: -0.025em;
+  --text-h1: clamp(3rem, 1.4rem + 5.4vw, 7.5rem);
+  --text-h1--line-height: 0.95;
+  --text-h1--letter-spacing: -0.02em;
+  --text-h2: clamp(2.5rem, 1.5rem + 3.6vw, 5.25rem);
+  --text-h2--line-height: 1;
+  --text-h2--letter-spacing: -0.015em;
+  --text-h3: clamp(1.75rem, 1.35rem + 1.3vw, 2.75rem);
   --text-h3--line-height: 1.05;
-  --text-h3--letter-spacing: -0.03em;
-  --text-lead: clamp(1.1875rem, 1.05rem + 0.55vw, 1.5rem);
-  --text-lead--line-height: 1.35;
-  --text-lead--letter-spacing: -0.01em;
+  --text-h3--letter-spacing: -0.01em;
+  --text-lead: clamp(1.125rem, 1.02rem + 0.4vw, 1.375rem);
+  --text-lead--line-height: 1.5;
   --text-body: 1.0625rem;
-  --text-body--line-height: 1.55;
+  --text-body--line-height: 1.6;
   --text-small: 0.875rem;
-  --text-small--line-height: 1.45;
+  --text-small--line-height: 1.5;
   --text-label: 0.75rem;
   --text-label--line-height: 1.4;
-  --text-label--letter-spacing: 0.02em;
+  --text-label--letter-spacing: 0.14em;
 
-  /* radius: square everywhere */
   --radius-sm: 0px;
   --radius-md: 0px;
   --radius-lg: 0px;
   --radius-xl: 0px;
 
-  /* motion */
   --ease-brand: var(--ease-out-brand);
   --ease-brand-in: var(--ease-in-brand);
 }
@@ -162,25 +140,21 @@
 
   html {
     background-color: var(--bg);
-    color-scheme: light;
     -webkit-text-size-adjust: 100%;
   }
 
-  html.dark {
-    color-scheme: dark;
-  }
-
-  /* no body background: the visible grid sits between the page colour and the content */
   body {
-    @apply text-fg font-sans text-body antialiased;
+    @apply bg-bg text-fg font-sans text-body antialiased;
     min-height: 100dvh;
     overflow-x: clip;
+    font-feature-settings: "ss01", "cv11";
   }
 
   h1,
   h2,
   h3 {
-    font-weight: 800;
+    font-family: var(--font-display);
+    font-weight: 400;
     text-wrap: balance;
   }
 
@@ -195,7 +169,7 @@
 
   :focus-visible {
     outline: 2px solid var(--signal);
-    outline-offset: 2px;
+    outline-offset: 3px;
   }
 }
 
@@ -210,7 +184,7 @@
   padding-inline: var(--gutter);
 }
 
-/* 4 columns on phones, 12 from 768px */
+/* 4 columns on phones, 12 from 768px (layout only; never drawn) */
 @utility grid-12 {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -222,15 +196,246 @@
 }
 
 @utility label {
-  font-family: var(--font-mono);
+  font-family: var(--font-sans);
   font-size: var(--text-label);
   line-height: var(--text-label--line-height);
   letter-spacing: var(--text-label--letter-spacing);
   text-transform: uppercase;
+  font-weight: 500;
 }
 
 @utility section-space {
   padding-block: var(--section-space);
+}
+
+/* Buttons: pill shapes. Primary is the only lime surface on the page. */
+@utility btn {
+  display: inline-flex;
+  height: 3rem;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  border-radius: 999px;
+  padding-inline: 1.5rem;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out-brand),
+    color var(--dur-fast) var(--ease-out-brand),
+    box-shadow var(--dur-fast) var(--ease-out-brand);
+}
+@utility btn-primary {
+  background: var(--signal);
+  color: var(--on-signal);
+}
+@utility btn-ghost {
+  box-shadow: inset 0 0 0 1px var(--rule-strong);
+  color: var(--fg);
+  &:hover {
+    box-shadow: inset 0 0 0 1px var(--fg);
+  }
+}
+
+/* Text links: hairline underline that turns solid on hover. */
+@utility link-line {
+  text-decoration: underline;
+  text-decoration-color: var(--rule-strong);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color var(--dur-fast) var(--ease-out-brand);
+  &:hover {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* ==========================================================================
+   Smooth scrolling (Lenis, desktop only; loaded with the motion runtime)
+   ========================================================================== */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis:not(.lenis-autoToggle).lenis-stopped {
+  overflow: clip;
+}
+.lenis [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+/* ==========================================================================
+   Home: pinned services. The stage sticks for four screens of scroll; the step
+   is set on [data-step] by the scene input (components/scene/input.ts).
+   Without JavaScript, or with reduced motion, the four services sit in normal flow.
+   ========================================================================== */
+
+.services-track {
+  position: relative;
+}
+html.js .services-track {
+  height: 500svh;
+}
+html.js .services-stage {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+}
+.services-panel:not(:last-child) {
+  margin-bottom: 5rem;
+}
+.services-panel {
+  transition:
+    opacity var(--dur-base) var(--ease-out-brand),
+    transform 450ms var(--ease-out-brand);
+}
+html.js .services-panels {
+  display: grid;
+}
+html.js .services-panel {
+  grid-area: 1 / 1;
+  margin-bottom: 0;
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  pointer-events: none;
+  visibility: hidden;
+  transition:
+    opacity var(--dur-base) var(--ease-out-brand),
+    transform 450ms var(--ease-out-brand),
+    visibility 0s linear var(--dur-base);
+}
+html.js [data-step="0"] .services-panel[data-index="0"],
+html.js [data-step="1"] .services-panel[data-index="1"],
+html.js [data-step="2"] .services-panel[data-index="2"],
+html.js [data-step="3"] .services-panel[data-index="3"] {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+  visibility: visible;
+  transition:
+    opacity 350ms var(--ease-out-brand) 80ms,
+    transform 450ms var(--ease-out-brand) 80ms,
+    visibility 0s;
+}
+.services-rail {
+  transform: scaleX(var(--svc, 0));
+  transform-origin: left;
+}
+html:not(.js) .services-only-js {
+  display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  html.js .services-track {
+    height: auto;
+  }
+  html.js .services-stage {
+    position: relative;
+    height: auto;
+  }
+  html.js .services-panels {
+    display: block;
+  }
+  html.js .services-panel {
+    margin-bottom: 5rem;
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+    visibility: visible;
+  }
+  .services-only-js {
+    display: none;
+  }
+}
+
+/* Heading reveals (SplitText line masks): room for ascenders and descenders while lines rise. */
+.rl-mask {
+  padding-block: 0.08em 0.14em;
+  margin-block: -0.08em -0.14em;
+}
+
+/* Process: the line draws itself (scaleY, scrubbed by the motion runtime). Full without JS. */
+.process-marker {
+  transition:
+    transform var(--dur-base) var(--ease-out-brand),
+    background-color var(--dur-base) var(--ease-out-brand);
+}
+
+/* ==========================================================================
+   Custom cursor (desktop, pointer: fine, no reduced motion; added by the runtime)
+   ========================================================================== */
+
+html.has-cursor,
+html.has-cursor a,
+html.has-cursor button,
+html.has-cursor [role="button"] {
+  cursor: none;
+}
+html.has-cursor input,
+html.has-cursor textarea,
+html.has-cursor select {
+  cursor: auto;
+}
+.cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 300;
+  pointer-events: none;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 999px;
+  background: var(--fg);
+  transition: opacity var(--dur-fast) var(--ease-out-brand);
+}
+.cursor-ring {
+  display: grid;
+  place-items: center;
+  width: 84px;
+  height: 84px;
+  margin: -42px 0 0 -42px;
+}
+.cursor-ring > span {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  height: 100%;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px var(--rule-strong);
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: transparent;
+  transform: scale(0.32);
+  transition:
+    transform var(--dur-base) var(--ease-out-brand),
+    background-color var(--dur-base) var(--ease-out-brand),
+    color var(--dur-fast) var(--ease-out-brand),
+    box-shadow var(--dur-base) var(--ease-out-brand);
+}
+.cursor[data-state="link"] .cursor-ring > span {
+  transform: scale(0.5);
+  box-shadow: inset 0 0 0 1px var(--fg);
+}
+.cursor[data-state="view"] .cursor-ring > span {
+  transform: scale(1);
+  background: var(--signal);
+  box-shadow: none;
+  color: var(--on-signal);
+}
+.cursor[data-state="view"] .cursor-dot,
+.cursor[data-state="hidden"] {
+  opacity: 0;
 }
 
 /* ==========================================================================
@@ -241,78 +446,10 @@
   *,
   *::before,
   *::after {
-    animation-duration: var(--dur-fast) !important;
+    animation-duration: 150ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: var(--dur-fast) !important;
+    transition-duration: 150ms !important;
     scroll-behavior: auto !important;
-  }
-}
-
-/* ==========================================================================
-   Motion components
-   ========================================================================== */
-
-/* RevealText: words slide up from a mask. Hidden state only when JS is running (html.js). */
-.reveal-word {
-  display: inline-block;
-  overflow: hidden;
-  vertical-align: top;
-  padding-bottom: 0.1em;
-  margin-bottom: -0.1em;
-}
-.reveal-word > span {
-  display: inline-block;
-  transition: transform var(--dur-slow) var(--ease-out-brand), opacity var(--dur-slow) var(--ease-out-brand);
-  transition-delay: calc(var(--i, 0) * 40ms);
-}
-html.js .reveal:not([data-in]) .reveal-word > span {
-  transform: translateY(105%);
-}
-@media (prefers-reduced-motion: reduce) {
-  html.js .reveal:not([data-in]) .reveal-word > span {
-    transform: none;
-    opacity: 0;
-  }
-  .reveal-word > span {
-    transition-delay: 0ms;
-  }
-}
-
-/* LogoMarquee: two copies of the list, the track moves by one copy width. */
-.marquee {
-  overflow: hidden;
-}
-.marquee__track {
-  display: flex;
-  width: max-content;
-  animation: marquee var(--marquee-duration, 40s) linear infinite;
-}
-.marquee[data-direction="right"] .marquee__track {
-  animation-direction: reverse;
-}
-.marquee[data-pause]:hover .marquee__track,
-.marquee[data-pause]:focus-within .marquee__track {
-  animation-play-state: paused;
-}
-.marquee__list {
-  display: flex;
-  flex-shrink: 0;
-}
-@keyframes marquee {
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .marquee__track {
-    animation: none;
-    width: auto;
-  }
-  .marquee__list {
-    flex-wrap: wrap;
-  }
-  .marquee__copy {
-    display: none;
   }
 }
 
@@ -323,7 +460,7 @@ html.js .reveal:not([data-in]) .reveal-word > span {
 @keyframes page-enter {
   from {
     opacity: 0;
-    transform: translate3d(0, 8px, 0);
+    transform: translate3d(0, 12px, 0);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -332,8 +469,4 @@ html.js .reveal:not([data-in]) .reveal-word > span {
       opacity: 0;
     }
   }
-}
-
-html {
-  scroll-padding-top: 5rem;
 }

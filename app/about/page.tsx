@@ -21,36 +21,29 @@ export default function AboutPage() {
   // The story is a TODO in content/site.ts; until it is written, the intro stands in.
   const story = profile.story.length > 0 ? profile.story : [profile.intro];
 
-  let n = 0;
-  const num = () => String(++n).padStart(2, "0");
-
   return (
     <>
       <Breadcrumbs items={[{ name: "About", href: "/about" }]} />
 
-      <header className="container-page grid-12 gap-y-10 pt-10 md:pt-16">
+      <header className="container-page grid-12 gap-y-12 pt-12 md:pt-20">
         <div className="col-span-4 md:col-span-7">
-          <p className="label text-fg-subtle">About</p>
-          <h1 className="mt-4 text-h1">{profile.name}</h1>
-          <p className="label mt-4 text-fg-muted">
+          <p className="label text-fg-muted">About</p>
+          <h1 className="mt-5 text-h1">{profile.name}</h1>
+          <p className="mt-5 text-fg-muted">
             {profile.jobTitle} · {profile.location.city}, {profile.location.country}
           </p>
-          <div className="mt-8 max-w-[52ch] space-y-5 text-lead">
+          <div className="mt-10 max-w-[52ch] space-y-5 text-lead">
             {story.map((p) => (
               <p key={p}>{p}</p>
             ))}
           </div>
-          <a
-            href={profile.resume}
-            download
-            className="mt-10 inline-flex h-12 items-center gap-3 border border-rule-strong px-5 font-medium transition-colors duration-(--dur-fast) ease-brand hover:bg-fg hover:text-bg"
-          >
+          <a href={profile.resume} download className="btn btn-ghost mt-10 h-14 px-7 text-base">
             <Download className="size-4" aria-hidden="true" />
             Download resume (PDF)
           </a>
         </div>
         <div className="col-span-4 md:col-span-4 md:col-start-9">
-          <div className="border border-rule-strong bg-surface">
+          <div className="bg-surface">
             <Image
               src={profile.photo.src}
               alt={profile.photo.alt}
@@ -64,11 +57,11 @@ export default function AboutPage() {
         </div>
       </header>
 
-      <dl className="container-page mt-16 grid grid-cols-1 border-y border-rule-strong sm:grid-cols-3 md:mt-24">
-        {stats.map((s, i) => (
-          <div key={s.label} className={`flex flex-col-reverse gap-1 py-6 ${i > 0 ? "border-t border-rule sm:border-t-0 sm:border-l sm:pl-(--grid-gap)" : ""}`}>
-            <dt className="label text-fg-subtle">{s.label}</dt>
-            <dd className="text-h2">
+      <dl className="container-page mt-20 grid grid-cols-3 gap-6 border-t border-rule pt-10 md:mt-28">
+        {stats.map((s) => (
+          <div key={s.label} className="flex flex-col-reverse gap-2">
+            <dt className="text-small text-fg-muted">{s.label}</dt>
+            <dd className="font-display text-h2 leading-none">
               {s.value}
               {s.suffix}
             </dd>
@@ -76,29 +69,29 @@ export default function AboutPage() {
         ))}
       </dl>
 
-      <div className="section-space space-y-16 md:space-y-24">
+      <div className="space-y-(--section-space) py-(--section-space)">
         <section aria-labelledby="experience-title">
-          <SectionHeader number={num()} label="Experience" id="experience-title" title="Where I have worked" />
-          <ol className="container-page mt-10">
+          <SectionHeader label="Experience" id="experience-title" title="Where I have worked" />
+          <ol className="container-page mt-12">
             {experience.map((r) => (
-              <li key={r.company} className="grid-12 gap-y-3 border-t border-rule py-8">
-                <p className="label col-span-4 text-fg-subtle md:col-span-3">
+              <li key={r.company} className="grid-12 gap-y-4 border-t border-rule py-10 last:border-b">
+                <p className="col-span-4 text-small tabular-nums text-fg-muted md:col-span-3">
                   {r.start} – {r.end ?? "Present"}
                 </p>
                 <div className="col-span-4 md:col-span-4">
                   <h3 className="text-h3">{r.company}</h3>
-                  <p className="mt-1 text-fg-muted">{r.title}</p>
+                  <p className="mt-2 text-fg-muted">{r.title}</p>
                 </div>
                 <div className="col-span-4 md:col-span-5">
                   <ul className="space-y-2">
                     {r.points.map((p) => (
                       <li key={p} className="flex gap-3">
-                        <span aria-hidden="true" className="mt-[0.6em] size-1.5 shrink-0 bg-fg" />
+                        <span aria-hidden="true" className="mt-[0.8em] h-px w-3 shrink-0 bg-fg-muted" />
                         {p}
                       </li>
                     ))}
                   </ul>
-                  <p className="label mt-4 text-fg-subtle">{r.stack.join(" · ")}</p>
+                  <p className="mt-4 text-small text-fg-muted">{r.stack.join(", ")}</p>
                 </div>
               </li>
             ))}
@@ -106,11 +99,11 @@ export default function AboutPage() {
         </section>
 
         <section aria-labelledby="awards-title">
-          <SectionHeader number={num()} label="Awards" id="awards-title" title="Awards" />
-          <ul className="container-page mt-10 grid grid-cols-1 border-t border-l border-rule-strong md:grid-cols-2">
+          <SectionHeader label="Awards" id="awards-title" title="Awards" />
+          <ul className="container-page mt-12 grid grid-cols-1 gap-x-(--grid-gap) md:grid-cols-2">
             {awards.map((a) => (
-              <li key={a.name} className="border-r border-b border-rule-strong p-5 md:p-6">
-                <p className="label text-fg-subtle">
+              <li key={a.name} className="border-t border-rule py-8">
+                <p className="text-small text-fg-muted">
                   {a.issuer}
                   {a.year ? ` · ${a.year}` : ""}
                 </p>
@@ -123,11 +116,11 @@ export default function AboutPage() {
 
         {profile.education && (
           <section aria-labelledby="education-title">
-            <SectionHeader number={num()} label="Education" id="education-title" title="Education" />
-            <div className="container-page grid-12 mt-10">
-              <div className="col-span-4 border-t border-rule py-6 md:col-span-9 md:col-start-4">
+            <SectionHeader label="Education" id="education-title" title="Education" />
+            <div className="container-page mt-12">
+              <div className="border-t border-rule py-8">
                 <h3 className="text-h3">{profile.education.degree}</h3>
-                <p className="mt-1 text-fg-muted">
+                <p className="mt-2 text-fg-muted">
                   {profile.education.institution}, {profile.education.years}
                 </p>
               </div>

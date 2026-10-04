@@ -17,10 +17,9 @@ export default function WorkPage() {
   return (
     <>
       <Breadcrumbs items={[{ name: "Work", href: "/work" }]} />
-      <section aria-labelledby="work-title" className="pt-10 pb-(--section-space) md:pt-16">
+      <section aria-labelledby="work-title" className="pt-12 pb-(--section-space) md:pt-20">
         <SectionHeader
           as="h1"
-          number=""
           label="Work"
           id="work-title"
           title="All projects"

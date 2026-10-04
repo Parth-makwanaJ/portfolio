@@ -1,8 +1,7 @@
 "use client";
 
 /**
- * Primary call-to-action with a small magnetic pull towards the pointer.
- * Own component (no free, licensed magnetic button was available in Vengeance UI or Skiper UI).
+ * Primary call to action with a small magnetic pull towards the pointer.
  * Transform only, via a CSS transition; mouse/pen only (no effect on touch);
  * off with prefers-reduced-motion. It is a normal Next.js link, so keyboard use is unchanged.
  */
@@ -12,8 +11,8 @@ import { useRef } from "react";
 import { ArrowRight } from "lucide-react";
 import { cx } from "@/lib/cx";
 
-const PULL = 0.25; // fraction of the pointer offset
-const MAX = 10; // px
+const PULL = 0.3; // fraction of the pointer offset
+const MAX = 12; // px
 
 export function MagneticButton({
   href,
@@ -48,7 +47,7 @@ export function MagneticButton({
       onPointerLeave={reset}
       onBlur={reset}
       className={cx(
-        "group inline-flex h-12 items-center justify-between gap-6 bg-signal px-5 font-medium text-on-signal transition-[transform,opacity] duration-(--dur-base) ease-brand hover:opacity-90",
+        "group btn btn-primary h-14 gap-4 px-7 text-base transition-transform duration-(--dur-base) ease-brand",
         className,
       )}
     >

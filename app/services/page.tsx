@@ -16,29 +16,26 @@ export default function ServicesPage() {
   return (
     <>
       <Breadcrumbs items={[{ name: "Services", href: "/services" }]} />
-      <section aria-labelledby="services-title" className="pt-10 pb-(--section-space) md:pt-16">
+      <section aria-labelledby="services-title" className="pt-12 pb-(--section-space) md:pt-20">
         <SectionHeader
           as="h1"
-          number=""
           label="Services"
           id="services-title"
           title="Services"
           intro="What I build and fix for businesses. Pick one to see what is included and the projects behind it."
         />
-        <ol className="container-page mt-12 border-t border-rule-strong md:mt-16">
-          {services.map((s, i) => {
+        <ul className="container-page mt-14 md:mt-20">
+          {services.map((s) => {
             const count = projectsForService(s.slug).length;
             return (
-              <li key={s.slug} className="border-b border-rule-strong">
-                <Link
-                  href={`/services/${s.slug}`}
-                  className="group grid-12 gap-y-4 py-8 transition-colors duration-(--dur-fast) ease-brand hover:bg-surface md:py-10"
-                >
-                  <span className="label col-span-4 text-fg-subtle md:col-span-1">{String(i + 1).padStart(2, "0")}</span>
-                  <h2 className="col-span-4 text-h2 md:col-span-5">{s.name}</h2>
-                  <p className="col-span-4 max-w-[44ch] text-body text-fg-muted md:col-span-4">{s.short}</p>
-                  <span className="col-span-4 flex items-start justify-between gap-4 md:col-span-2">
-                    <span className="label text-fg-subtle">
+              <li key={s.slug} className="border-t border-rule last:border-b">
+                <Link href={`/services/${s.slug}`} className="group grid-12 gap-y-4 py-10 md:py-14">
+                  <h2 className="col-span-4 text-h2 transition-transform duration-(--dur-fast) ease-brand group-hover:translate-x-2 motion-reduce:transform-none md:col-span-6">
+                    {s.name}
+                  </h2>
+                  <p className="col-span-4 max-w-[44ch] text-fg-muted md:col-span-4 md:pt-3">{s.short}</p>
+                  <span className="col-span-4 flex items-start justify-between gap-4 md:col-span-2 md:pt-3">
+                    <span className="text-small text-fg-muted">
                       {count} {count === 1 ? "project" : "projects"}
                     </span>
                     <ArrowUpRight
@@ -50,7 +47,7 @@ export default function ServicesPage() {
               </li>
             );
           })}
-        </ol>
+        </ul>
       </section>
       <FinalCta />
     </>
