@@ -2,9 +2,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-import { Github } from "@/app/components/Icons";
-import { SectionHeading } from "@/app/components/SectionHeading";
-import { projects } from "@/app/lib/data";
+import { SectionHeading } from "@/components/SectionHeading";
+import Image from "next/image";
+import { projects } from "@/content/site";
 
 export default function Projects() {
   const [filter, setFilter] = useState("All");
@@ -34,45 +34,43 @@ export default function Projects() {
 
       <motion.div layout className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <AnimatePresence>
-          {filteredProjects.map((project, index) => (
+          {filteredProjects.map((project) => (
             <motion.div
               layout
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.9 }}
               transition={{ duration: 0.3 }}
-              key={project.title}
+              key={project.slug}
               className="glass rounded-2xl overflow-hidden group flex flex-col"
             >
               <div className="relative aspect-video overflow-hidden bg-white/5">
                 <div className="absolute inset-0 bg-gradient-to-tr from-accent-cyan/20 to-accent-purple/20 mix-blend-overlay z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                <img 
-                  src={project.image} 
-                  alt={project.title} 
+                <Image
+                  src={project.image.src}
+                  alt={project.image.alt}
+                  width={project.image.width}
+                  height={project.image.height}
+                  sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
                   className="w-full h-full object-cover relative z-0 transition-transform duration-500 group-hover:scale-105"
                 />
               </div>
               <div className="p-6 flex-1 flex flex-col">
-                <h3 className="text-xl font-bold mb-2 group-hover:text-accent-cyan transition-colors">{project.title}</h3>
+                <h3 className="text-xl font-bold mb-2 group-hover:text-accent-cyan transition-colors">{project.name}</h3>
                 <p className="text-foreground/60 text-sm mb-6 flex-1 leading-relaxed">
-                  {project.description}
+                  {project.summary}
                 </p>
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {project.tech.map(tech => (
+                  {project.stack.map(tech => (
                     <span key={tech} className="text-xs px-2 py-1 bg-white/5 rounded-full text-foreground/80">
                       {tech}
                     </span>
                   ))}
                 </div>
                 <div className="flex items-center gap-4 pt-4 border-t border-white/5">
-                  {project.live && project.live !== "#" && project.live !== "" && (
-                    <a aria-label={`Live Demo for ${project.title}`} href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-accent-cyan transition-colors">
+                  {project.live && (
+                    <a aria-label={`Live Demo for ${project.name}`} href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-accent-cyan transition-colors">
                       <ExternalLink className="w-4 h-4" /> Live Demo
-                    </a>
-                  )}
-                  {project.github && project.github !== "#" && project.github !== "" && (
-                    <a aria-label={`Source code for ${project.title}`} href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-accent-purple transition-colors">
-                      <Github className="w-4 h-4" /> Source
                     </a>
                   )}
                 </div>

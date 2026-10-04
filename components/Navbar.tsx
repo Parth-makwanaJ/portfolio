@@ -1,8 +1,8 @@
 "use client";
 import { useState, useEffect } from "react";
-import { motion, useScroll, useMotionValueEvent } from "framer-motion";
-import { ThemeToggle } from "@/app/components/ThemeToggle";
-import { cn } from "@/app/lib/utils";
+import { motion } from "framer-motion";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { cn } from "@/lib/utils";
 
 const links = [
   { name: "Home", href: "#home" },

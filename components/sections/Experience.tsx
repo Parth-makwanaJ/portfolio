@@ -1,8 +1,8 @@
 "use client";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { SectionHeading } from "@/app/components/SectionHeading";
-import { experiences } from "@/app/lib/data";
+import { SectionHeading } from "@/components/SectionHeading";
+import { experience } from "@/content/site";
 
 export default function Experience() {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -26,7 +26,7 @@ export default function Experience() {
         </div>
 
         <div className="space-y-24">
-          {experiences.map((exp, index) => {
+          {experience.map((exp, index) => {
             const isEven = index % 2 === 0;
             return (
               <div key={index} className="relative flex flex-col md:flex-row items-center justify-between w-full">
@@ -40,7 +40,7 @@ export default function Experience() {
                     >
                       <h3 className="text-xl font-bold">{exp.title}</h3>
                       <div className="text-accent-cyan font-medium my-1">{exp.company}</div>
-                      <div className="text-foreground/50 text-sm">{exp.duration}</div>
+                      <div className="text-foreground/50 text-sm">{exp.start} – {exp.end ?? "Present"}</div>
                     </motion.div>
                   )}
                   {!isEven && (
@@ -52,7 +52,7 @@ export default function Experience() {
                     >
                       <h3 className="text-xl font-bold">{exp.title}</h3>
                       <div className="text-accent-purple font-medium my-1">{exp.company}</div>
-                      <div className="text-foreground/50 text-sm">{exp.duration}</div>
+                      <div className="text-foreground/50 text-sm">{exp.start} – {exp.end ?? "Present"}</div>
                     </motion.div>
                   )}
                 </div>
@@ -71,12 +71,12 @@ export default function Experience() {
                    <div className="md:hidden mb-4">
                      <h3 className="text-xl font-bold leading-tight">{exp.title}</h3>
                      <div className="text-gradient font-medium my-1">{exp.company}</div>
-                     <div className="text-foreground/50 text-sm mb-4">{exp.duration}</div>
+                     <div className="text-foreground/50 text-sm mb-4">{exp.start} – {exp.end ?? "Present"}</div>
                    </div>
 
                   <div className="glass p-6 rounded-2xl relative group hover:border-accent-cyan/30 transition-colors">
                     <ul className="space-y-2 mb-4">
-                      {exp.achievements.map((item, i) => (
+                      {exp.points.map((item, i) => (
                         <li key={i} className="text-foreground/70 text-sm flex items-start gap-2">
                           <span className="text-accent-cyan mt-1">•</span>
                           {item}
@@ -84,7 +84,7 @@ export default function Experience() {
                       ))}
                     </ul>
                     <div className="flex flex-wrap gap-2 mt-4 pt-4 border-t border-white/5">
-                      {exp.tech.map(tech => (
+                      {exp.stack.map(tech => (
                         <span key={tech} className="text-xs px-2 py-1 bg-white/5 rounded-full text-foreground/80">
                           {tech}
                         </span>

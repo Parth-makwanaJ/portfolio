@@ -1,12 +1,13 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/app/components/Navbar";
-import CustomCursor from "@/app/components/CustomCursor";
-import { ThemeProvider } from "@/app/components/ThemeProvider";
+import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({
-  variable: "--font-inter",
+  variable: "--font-sans",
+  display: "swap",
   subsets: ["latin"],
 });
 
@@ -23,17 +24,12 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} antialiased`}
+      className={cn("antialiased font-sans", inter.variable)}
       suppressHydrationWarning
     >
-      <head>
-        <link rel="preconnect" href="https://resize.sandesh.com" />
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-      </head>
       <body className="min-h-full flex flex-col relative font-sans bg-background text-foreground transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <div className="mesh-bg bg-background transition-colors duration-300" />
-          {/* <CustomCursor /> */}
           <Navbar />
           {children}
         </ThemeProvider>

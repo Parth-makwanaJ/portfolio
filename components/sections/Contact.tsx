@@ -1,8 +1,11 @@
 "use client";
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
-import { Github, Linkedin, XLogo } from "@/app/components/Icons";
-import { SectionHeading } from "@/app/components/SectionHeading";
+import { Github, Linkedin, XLogo } from "@/components/Icons";
+import { SectionHeading } from "@/components/SectionHeading";
+import { contact, socials } from "@/content/site";
+
+const socialIcons = { GitHub: Github, LinkedIn: Linkedin, X: XLogo };
 
 export default function Contact() {
   return (
@@ -19,7 +22,7 @@ export default function Contact() {
         <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent-cyan/10 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
 
         <h3 className="text-4xl md:text-5xl font-bold mb-6 relative z-10">
-          Let's create something <span className="text-gradient">extraordinary.</span>
+          Let&apos;s create something <span className="text-gradient">extraordinary.</span>
         </h3>
 
         <p className="text-foreground/70 text-lg md:text-xl leading-relaxed mb-10 max-w-2xl relative z-10">
@@ -28,7 +31,7 @@ export default function Contact() {
         </p>
 
         <motion.a
-          href="mailto:parthmakwan02@gmail.com"
+          href={`mailto:${contact.email}`}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="relative z-10 flex items-center justify-center gap-3 px-10 py-5 bg-gradient-to-r from-accent-cyan to-accent-purple text-background font-bold text-lg rounded-full overflow-hidden group mb-14"
@@ -41,22 +44,22 @@ export default function Contact() {
         <div className="relative z-10 pt-10 border-t border-foreground/10 w-full flex flex-col items-center">
           <div className="text-sm font-semibold text-foreground/40 uppercase tracking-widest mb-8">Or find me on</div>
           <div className="flex items-center gap-6">
-            {[
-              { icon: Github, href: "https://github.com/Parth-makwanaJ" },
-              { icon: Linkedin, href: "https://www.linkedin.com/in/parth-makwana-408571278/" },
-              { icon: XLogo, href: "https://x.com/parthx09" }
-            ].map((social, i) => (
+            {socials.map((social) => {
+              const Icon = socialIcons[social.name];
+              return (
               <motion.a
-                key={i}
+                key={social.name}
                 href={social.href}
+                aria-label={`${social.name}: ${social.handle}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ y: -5, scale: 1.1 }}
                 className="w-16 h-16 rounded-full glass border border-foreground/10 flex items-center justify-center text-foreground hover:text-accent-purple hover:border-accent-purple/50 transition-all duration-300"
               >
-                <social.icon className="w-6 h-6" />
+                <Icon className="w-6 h-6" aria-hidden="true" />
               </motion.a>
-            ))}
+              );
+            })}
           </div>
         </div>
       </motion.div>

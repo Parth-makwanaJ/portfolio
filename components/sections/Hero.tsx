@@ -1,7 +1,8 @@
 "use client";
 import { motion } from "framer-motion";
 import { ArrowDown, ChevronRight } from "lucide-react";
-import Hero3D from "@/app/components/3d/Hero3D";
+import Hero3D from "@/components/3d/Hero3D";
+import { profile } from "@/content/site";
 
 export default function Hero() {
   return (
@@ -21,16 +22,15 @@ export default function Hero() {
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.5 }}
           >
-            <span className="text-sm font-medium text-foreground/80 tracking-wide">Available for new opportunities</span>
+            <span className="text-sm font-medium text-foreground/80 tracking-wide">{profile.availability}</span>
           </motion.div>
 
           <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-tight mb-6">
-            Building digital <br className="hidden md:block" />
-            experience with <span className="text-gradient">precision</span>
+            {profile.headline}
           </h1>
 
           <p className="text-lg md:text-xl text-foreground/60 mb-10 max-w-2xl leading-relaxed">
-            Backend Developer focused on scalable architectures, efficient APIs, and high-performance systems.
+            {profile.intro}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
