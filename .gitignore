@@ -42,3 +42,4 @@ next-env.d.ts
 
 # local planning notes
 PORTFOLIO_UPGRADE_PROMPT.md
+!.env.example

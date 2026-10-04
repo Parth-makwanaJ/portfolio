@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { Image as ImageData } from "@/content/site";
-import { cn } from "@/lib/utils";
+import { cx } from "@/lib/cx";
 
 /**
  * The one frame every project screenshot sits in: a fixed 2:1 box with a 1px rule and a flat mat.
@@ -21,7 +21,7 @@ export function ProjectFrame({
   imageClassName?: string;
 }) {
   return (
-    <div className={cn("relative aspect-[2/1] overflow-hidden border border-rule-strong bg-surface p-[3%]", className)}>
+    <div className={cx("relative aspect-[2/1] overflow-hidden border border-rule-strong bg-surface p-[3%]", className)}>
       <Image
         src={image.src}
         alt={image.alt}
@@ -29,7 +29,7 @@ export function ProjectFrame({
         height={image.height}
         sizes={sizes}
         preload={preload}
-        className={cn("size-full object-contain", imageClassName)}
+        className={cx("size-full object-contain", imageClassName)}
       />
     </div>
   );

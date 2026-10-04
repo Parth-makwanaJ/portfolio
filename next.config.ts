@@ -1,6 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  experimental: {
+    // radix-ui is one barrel that re-exports every primitive; load only what is used.
+    optimizePackageImports: ["radix-ui"],
+  },
   images: {
     // Images are resized by the remote host in content/site.ts (imageCdn), not by this server.
     loader: "custom",

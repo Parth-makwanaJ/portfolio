@@ -41,6 +41,8 @@ export type Project = {
   stack: string[];
   live: string | null;
   image: Image;
+  /** Optional screen recording for the case study. mp4 and/or webm URL, poster reserves the space. */
+  video?: { mp4?: string; webm?: string; poster: Image; label: string };
   featured: boolean;
 };
 
@@ -103,6 +105,13 @@ function cdnImage(path: string, ratioW: number, ratioH: number, alt: string): Im
   const format = imageCdn.format ? `@${imageCdn.format}` : "";
   const ar = (ratioH / ratioW).toFixed(4);
   return { src: `${imageCdn.resizer}/{size}/plain/${imageCdn.origin}/${path}${format}?ar=${ar}`, width, height, alt };
+}
+
+/** Absolute URL of an image at a given width, for JSON-LD and Open Graph (same format as the loader). */
+export function imageUrl(image: Image, width = 1200): string {
+  const [url, query = ""] = image.src.split("?");
+  const ratio = Number(new URLSearchParams(query).get("ar")) || image.height / image.width;
+  return url.replace("{size}", `rs:fill:${width}:${Math.round(width * ratio)}/q:75`);
 }
 
 export const site = {

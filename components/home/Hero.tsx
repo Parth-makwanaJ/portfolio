@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { MagneticButton } from "@/components/motion/MagneticButton";
 import { HeroComposition } from "@/components/home/HeroComposition";
 import { profile } from "@/content/site";
 
@@ -31,16 +31,7 @@ export function Hero() {
         <div className="col-span-4 mt-8 md:col-span-5 md:mt-[clamp(1.75rem,5svh,4rem)]">
           <p className="max-w-[34ch] text-lead text-fg-muted">{profile.intro}</p>
           <div className="mt-6 flex flex-col gap-3 sm:flex-row md:mt-8">
-            <Link
-              href="/contact"
-              className="group inline-flex h-12 items-center justify-between gap-6 bg-signal px-5 font-medium text-on-signal transition-opacity duration-(--dur-fast) ease-brand hover:opacity-90"
-            >
-              Start a project
-              <ArrowRight
-                className="size-4 transition-transform duration-(--dur-fast) ease-brand group-hover:translate-x-1"
-                aria-hidden="true"
-              />
-            </Link>
+            <MagneticButton href="/contact">Start a project</MagneticButton>
             <Link
               href="/work"
               className="inline-flex h-12 items-center justify-center border border-rule-strong px-5 font-medium transition-colors duration-(--dur-fast) ease-brand hover:bg-fg hover:text-bg"
