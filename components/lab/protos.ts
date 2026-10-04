@@ -1,4 +1,4 @@
-export type ProtoId = "a" | "b" | "c";
+export type ProtoId = "a" | "b" | "c" | "d";
 
 export type Proto = {
   id: ProtoId;
@@ -62,5 +62,20 @@ export const protos: Record<ProtoId, Proto> = {
     headline:
       "font-semibold text-[clamp(3rem,0.8rem+6.6vw,8.75rem)] leading-[0.92] tracking-[-0.035em] [font-variation-settings:'opsz'_144,'SOFT'_30]",
     layout: "center",
+  },
+  d: {
+    id: "d",
+    name: "Instrument",
+    idea: "Rings, light and crystal as one instrument",
+    bg: "#0D0C0B",
+    fg: "#EDE7DD",
+    muted: "#9C9488",
+    rule: "rgba(237,231,221,0.14)",
+    accent: "#D4FF3A",
+    onAccent: "#0D0C0B",
+    display: "var(--lab-display-a)",
+    text: "var(--lab-text-a)",
+    headline: "font-normal text-[clamp(3rem,1.2rem+5.4vw,7.25rem)] leading-[0.95] tracking-[-0.02em]",
+    layout: "left",
   },
 };

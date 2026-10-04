@@ -14,6 +14,7 @@ const scenes = {
   a: dynamic(() => import("@/components/lab/scenes/CalibreScene"), { ssr: false }),
   b: dynamic(() => import("@/components/lab/scenes/SignalScene"), { ssr: false }),
   c: dynamic(() => import("@/components/lab/scenes/MonolithScene"), { ssr: false }),
+  d: dynamic(() => import("@/components/lab/scenes/InstrumentScene"), { ssr: false }),
 };
 
 export function LabScene({ id, fps }: { id: ProtoId; fps: boolean }) {

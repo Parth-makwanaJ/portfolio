@@ -7,6 +7,8 @@
  */
 export const labInput = {
   progress: 0,
+  /** scrollY / viewport height: for prototype D, one stop per viewport. */
+  stop: 0,
   pointer: { x: 0, y: 0 },
   scrollY: 0,
   reduced: false,
@@ -27,6 +29,7 @@ export function startLabInput() {
   const onScroll = () => {
     const max = document.documentElement.scrollHeight - window.innerHeight;
     labInput.scrollY = window.scrollY;
+    labInput.stop = window.scrollY / Math.max(1, window.innerHeight);
     labInput.progress = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
   };
   const onPointer = (e: PointerEvent) => {

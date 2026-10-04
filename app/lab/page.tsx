@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { LabOverlay } from "@/components/lab/LabOverlay";
+import { LabOverlayD } from "@/components/lab/LabOverlayD";
 import { LabPicker } from "@/components/lab/LabPicker";
 import { LabScene } from "@/components/lab/LabScene";
 import { protos, type ProtoId } from "@/components/lab/protos";
@@ -17,7 +18,7 @@ const fontVars = [calibreDisplay, calibreText, signalDisplay, signalText, monoli
 
 export default async function LabPage({ searchParams }: { searchParams: Promise<{ v?: string; fps?: string }> }) {
   const { v, fps } = await searchParams;
-  const id: ProtoId = v === "b" || v === "c" ? v : "a";
+  const id: ProtoId = v === "b" || v === "c" || v === "d" ? v : "a";
   const proto = protos[id];
   const showFps = fps === "1";
 
@@ -29,7 +30,7 @@ export default async function LabPage({ searchParams }: { searchParams: Promise<
         body:has([data-lab]) [data-site-chrome] { display: none !important; }
       `}</style>
       <LabScene id={id} fps={showFps} />
-      <LabOverlay proto={proto} />
+      {id === "d" ? <LabOverlayD proto={proto} /> : <LabOverlay proto={proto} />}
       <LabPicker current={id} fps={showFps} />
     </div>
   );
