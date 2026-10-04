@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { HeroComposition } from "@/components/home/HeroComposition";
+import { HeroMotionLoader } from "@/components/home/HeroMotionLoader";
 import { profile } from "@/content/site";
 
 // Name and location are hidden on phones: the header shows the name and the intro says where.
@@ -13,7 +14,7 @@ const facts = [
 
 export function Hero() {
   return (
-    <section aria-labelledby="hero-title" className="border-b border-rule-strong">
+    <section id="hero" aria-labelledby="hero-title" className="border-b border-rule-strong">
       <div className="container-page grid-12 pt-6 pb-16 md:pt-[clamp(1.5rem,4svh,3rem)] md:pb-24">
         <dl className="col-span-4 grid grid-cols-2 gap-x-(--grid-gap) gap-y-5 border-t border-rule-strong pt-3 md:col-span-12 md:grid-cols-4">
           {facts.map((f) => (
@@ -43,6 +44,7 @@ export function Hero() {
 
         {/* Fixed-size slot (height comes from CSS, not JS), so nothing shifts when Phase 4 animates it. */}
         <HeroComposition className="col-span-4 mt-14 md:col-span-6 md:col-start-7 md:mt-16" />
+        <HeroMotionLoader heroId="hero" />
       </div>
     </section>
   );
