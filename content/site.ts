@@ -96,7 +96,7 @@ export const imageCdn = {
   format: "webp",
 } as const;
 
-/** Builds an Image whose src carries its aspect ratio for the loader. */
+/** Builds an Image whose src carries its aspect ratio for the loader. Pass the source's own size so nothing is cropped. */
 function cdnImage(path: string, ratioW: number, ratioH: number, alt: string): Image {
   const width = 1600;
   const height = Math.round((width * ratioH) / ratioW);
@@ -260,7 +260,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Laravel", "Node.js", "MySQL"],
     live: "https://sandesh.com/",
-    image: cdnImage("2024/09/09/Sandesh.png", 16, 9, "Sandesh news homepage with Gujarati headlines, a live blog and trending videos"),
+    image: cdnImage("2024/09/09/Sandesh.png", 1891, 948, "Sandesh news homepage with Gujarati headlines, a live blog and trending videos"),
     featured: true,
   },
   {
@@ -282,7 +282,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Node.js", "Laravel", "PHP", "Redis"],
     live: "https://matrubharti.com/",
-    image: cdnImage("2024/09/09/Matrubharti.png", 16, 9, "Matrubharti homepage inviting readers to publish and read stories, novels and books"),
+    image: cdnImage("2024/09/09/Matrubharti.png", 1885, 945, "Matrubharti homepage inviting readers to publish and read stories, novels and books"),
     featured: true,
   },
   {
@@ -303,7 +303,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify", "Shiprocket"],
     live: "https://crystalworlld.com/",
-    image: cdnImage("2024/09/09/crystalworlld.png", 16, 9, "Crystal World Shopify store showing the founder's story next to the shop menu"),
+    image: cdnImage("2024/09/09/crystalworlld.png", 1895, 886, "Crystal World Shopify store showing the founder's story next to the shop menu"),
     featured: true,
   },
   {
@@ -324,7 +324,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Laravel", "MySQL"],
     live: "https://championscricket.club/",
-    image: cdnImage("2024/09/09/3c.png", 16, 9, "Champions Cricket Club homepage with a batsman mid-shot and a register button"),
+    image: cdnImage("2024/09/09/3c.png", 1903, 908, "Champions Cricket Club homepage with a batsman mid-shot and a register button"),
     featured: true,
   },
   {
@@ -345,7 +345,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["CodeIgniter", "SQL Server", "Firebase"],
     live: "https://www.prasadgroup.com/",
-    image: cdnImage("2024/09/09/FTS.png", 16, 9, "Admin sign-in screen of the Field Tracking System"),
+    image: cdnImage("2024/09/09/FTS.png", 1919, 896, "Admin sign-in screen of the Field Tracking System"),
     featured: false,
   },
   {
@@ -366,7 +366,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Node.js"],
     live: null,
-    image: cdnImage("2024/09/09/Pragati.png", 16, 9, "Pragati Finance dashboard with transaction totals and a daily transactions table"),
+    image: cdnImage("2024/09/09/Pragati.png", 1914, 908, "Pragati Finance dashboard with transaction totals and a daily transactions table"),
     featured: false,
   },
   {
@@ -388,7 +388,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://duali.co/",
-    image: cdnImage("2024/09/09/Duali.png", 16, 9, "Duali Shopify store homepage with floral ceramic vases"),
+    image: cdnImage("2024/09/09/Duali.png", 1908, 911, "Duali Shopify store homepage with floral ceramic vases"),
     featured: false,
   },
   {
@@ -408,7 +408,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://luxaderme.in/",
-    image: cdnImage("2024/09/09/luxaderme.png", 16, 9, "LuxaDerme Shopify store homepage showing Korean skincare products"),
+    image: cdnImage("2024/09/09/luxaderme.png", 1904, 910, "LuxaDerme Shopify store homepage showing Korean skincare products"),
     featured: false,
   },
   {
@@ -428,7 +428,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://whitemaisondecouture.com/",
-    image: cdnImage("2024/09/09/WMDC.png", 16, 9, "White Maison De Couture Shopify store featuring a designer collection"),
+    image: cdnImage("2024/09/09/WMDC.png", 1904, 910, "White Maison De Couture Shopify store featuring a designer collection"),
     featured: false,
   },
   {
@@ -448,7 +448,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://aminnewyork.com/",
-    image: cdnImage("2024/09/09/aminnewyork.png", 16, 9, "Amin New York Shopify store showing custom-made menswear"),
+    image: cdnImage("2024/09/09/aminnewyork.png", 1904, 913, "Amin New York Shopify store showing custom-made menswear"),
     featured: false,
   },
 ];

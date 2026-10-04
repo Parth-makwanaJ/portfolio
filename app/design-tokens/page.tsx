@@ -1,6 +1,7 @@
 // TEMPORARY: design review page for Phase 2. Delete before launch.
 import type { Metadata } from "next";
 import Image from "next/image";
+import { ProjectFrame } from "@/components/ProjectFrame";
 import { profile, projects } from "@/content/site";
 
 export const metadata: Metadata = {
@@ -133,19 +134,12 @@ export default function DesignTokens() {
       </section>
 
       <section className="mt-20 border-t border-rule-strong pt-4">
-        <h2 className="label">06 Image frame · loaded from the remote resizer</h2>
+        <h2 className="label">06 Project frame · original ratio, no crop · loaded from the remote resizer</h2>
         <ul className="mt-6 grid grid-cols-2 gap-(--grid-gap) md:grid-cols-4">
           {projects.map((p) => (
-            <li key={p.slug} className="border border-rule-strong">
-              <Image
-                src={p.image.src}
-                alt={p.image.alt}
-                width={p.image.width}
-                height={p.image.height}
-                sizes="(min-width: 768px) 25vw, 50vw"
-                className="aspect-video w-full object-cover"
-              />
-              <p className="label border-t border-rule-strong px-2 py-1.5">{p.name}</p>
+            <li key={p.slug}>
+              <ProjectFrame image={p.image} sizes="(min-width: 768px) 25vw, 50vw" />
+              <p className="label mt-2">{p.name}</p>
             </li>
           ))}
           <li className="border border-rule-strong">

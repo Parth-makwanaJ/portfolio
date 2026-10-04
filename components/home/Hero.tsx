@@ -3,33 +3,34 @@ import { ArrowRight } from "lucide-react";
 import { HeroComposition } from "@/components/home/HeroComposition";
 import { profile } from "@/content/site";
 
+// Name and location are hidden on phones: the header shows the name and the intro says where.
 const facts = [
-  { key: "Name", value: profile.name },
-  { key: "Role", value: profile.jobTitle },
-  { key: "Based in", value: `${profile.location.city}, ${profile.location.country}` },
-  { key: "Status", value: profile.availability },
+  { key: "Name", value: profile.name, phone: false },
+  { key: "Role", value: profile.jobTitle, phone: true },
+  { key: "Based in", value: `${profile.location.city}, ${profile.location.country}`, phone: false },
+  { key: "Status", value: profile.availability, phone: true },
 ];
 
 export function Hero() {
   return (
     <section aria-labelledby="hero-title" className="border-b border-rule-strong">
-      <div className="container-page grid-12 pt-8 pb-16 md:pt-12 md:pb-24">
+      <div className="container-page grid-12 pt-6 pb-16 md:pt-[clamp(1.5rem,4svh,3rem)] md:pb-24">
         <dl className="col-span-4 grid grid-cols-2 gap-x-(--grid-gap) gap-y-5 border-t border-rule-strong pt-3 md:col-span-12 md:grid-cols-4">
           {facts.map((f) => (
-            <div key={f.key}>
+            <div key={f.key} className={f.phone ? "" : "max-md:hidden"}>
               <dt className="label text-fg-subtle">{f.key}</dt>
               <dd className="mt-1 text-small font-medium">{f.value}</dd>
             </div>
           ))}
         </dl>
 
-        <h1 id="hero-title" className="col-span-4 mt-12 text-display md:col-span-11 md:mt-20">
+        <h1 id="hero-title" className="col-span-4 mt-8 text-display md:col-span-11 md:mt-[clamp(2rem,6svh,5rem)]">
           {profile.headline}
         </h1>
 
-        <div className="col-span-4 mt-10 md:col-span-5 md:mt-16">
+        <div className="col-span-4 mt-8 md:col-span-5 md:mt-[clamp(1.75rem,5svh,4rem)]">
           <p className="max-w-[34ch] text-lead text-fg-muted">{profile.intro}</p>
-          <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <div className="mt-6 flex flex-col gap-3 sm:flex-row md:mt-8">
             <Link
               href="/contact"
               className="group inline-flex h-12 items-center justify-between gap-6 bg-signal px-5 font-medium text-on-signal transition-opacity duration-(--dur-fast) ease-brand hover:opacity-90"

@@ -116,7 +116,8 @@
   --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 
   /* type scale (fluid). Weights in use: 400, 500, 800. */
-  --text-display: clamp(3rem, 1rem + 7.4vw, 9.25rem);
+  /* min() with svh keeps the hero CTA above the fold on short screens (1366x768, 1280x720) */
+  --text-display: clamp(2.75rem, min(1rem + 7.4vw, 0.25rem + 12.5svh), 9.25rem);
   --text-display--line-height: 0.88;
   --text-display--letter-spacing: -0.045em;
   --text-h1: clamp(2.75rem, 1.2rem + 5.6vw, 7rem);
