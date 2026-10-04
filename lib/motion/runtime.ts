@@ -32,7 +32,7 @@ export function start() {
     gsap.ticker.add((time) => lenis?.raf(time * 1000));
     gsap.ticker.lagSmoothing(0);
     setScroller(lenis);
-    startCursor();
+    setTimeout(startCursor, 0); // its own task
   }
   void document.fonts?.ready.then(() => ScrollTrigger.refresh());
   // The page height changes as fonts and images arrive, or when the services switch between pinned

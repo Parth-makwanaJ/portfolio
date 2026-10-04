@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   // The headline face is fetched with the HTML, before the CSS asks for it. Geist is requested by the
   // inlined CSS straight away; preloading it too only took bandwidth from the headline font.
-  preload("/fonts/instrument-serif-latin-400.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous" });
+  preload("/fonts/instrument-serif-subset.woff2", { as: "font", type: "font/woff2", crossOrigin: "anonymous", fetchPriority: "high" });
   return (
     <html lang="en" suppressHydrationWarning>
       <head>

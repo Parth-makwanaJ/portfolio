@@ -104,7 +104,7 @@ export function mountScene(container: HTMLElement): () => void {
   renderer.setClearColor(BG, 1);
   renderer.outputColorSpace = SRGBColorSpace;
   const canvas = renderer.domElement;
-  canvas.style.cssText = "display:block;width:100%;height:100%;opacity:0;transition:opacity 700ms cubic-bezier(0.22,1,0.36,1)";
+  canvas.style.cssText = "position:relative;z-index:1;display:block;width:100%;height:100%;opacity:0;transition:opacity 700ms cubic-bezier(0.22,1,0.36,1)";
   container.append(canvas);
 
   const scene = new Scene();

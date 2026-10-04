@@ -2,29 +2,27 @@
 
 /**
  * Loads the motion runtime (Lenis, GSAP, ScrollTrigger, SplitText, the cursor) as its own chunk
- * once the page has loaded and the browser is idle, so none of it is in the JavaScript needed for
- * first paint. Every page's content is complete and visible without it.
+ * when the start gate opens (idle after load, or the first scroll or pointer move), so none of it is
+ * in the JavaScript needed for first paint. Every page's content is complete and visible without it.
  * After each navigation it sets up that page's scroll effects again.
  */
 
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
+import { whenStartAllowed } from "@/lib/motion/start-gate";
 
 type Runtime = typeof import("@/lib/motion/runtime");
 
 let runtime: Promise<Runtime> | null = null;
+const nextTask = () => new Promise<void>((resolve) => setTimeout(resolve, 0));
+// Evaluating the chunk, starting Lenis and setting up the page each get their own task.
 const load = () =>
-  (runtime ??= import("@/lib/motion/runtime").then((m) => {
+  (runtime ??= import("@/lib/motion/runtime").then(async (m) => {
+    await nextTask();
     m.start();
+    await nextTask();
     return m;
   }));
-
-function whenIdle(cb: () => void) {
-  const run = () =>
-    "requestIdleCallback" in window ? window.requestIdleCallback(cb, { timeout: 1500 }) : setTimeout(cb, 200);
-  if (document.readyState === "complete") run();
-  else window.addEventListener("load", run, { once: true });
-}
 
 export function MotionRoot() {
   const pathname = usePathname();
@@ -37,7 +35,7 @@ export function MotionRoot() {
         if (!cancelled) cleanup = m.initPage();
       });
     if (runtime) go();
-    else whenIdle(go);
+    else whenStartAllowed(go);
     return () => {
       cancelled = true;
       cleanup?.();

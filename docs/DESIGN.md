@@ -18,7 +18,7 @@ Dark, cinematic, engineered: a warm near-black page, a serif display face, and o
 | Text | `#EDE7DD` (15.9:1); muted `#9C9488` (6.5:1) | Both pass WCAG AA on the background and the surface |
 | Hairlines | text colour at 12% and 24% | Structure without heavy rules |
 | Accent | Lime `#D4FF3A`, text on it `#0D0C0B` (16.9:1) | One job: the primary action, focus rings, progress (services rail, process line, active nav dot) and the particles |
-| Type | Instrument Serif 400 for display and headings; Geist 400/500 for text | A serif with character over a clean grotesque. Labels: 12px uppercase, 0.14em tracking. Self-hosted latin subsets in `public/fonts`, `font-display: swap`, the serif preloaded; each has a fallback face with matched metrics (`app/globals.css`) |
+| Type | Instrument Serif 400 for display and headings; Geist 400/500 for text | A serif with character over a clean grotesque. Labels: 12px uppercase, 0.14em tracking. Self-hosted in `public/fonts`, subset to the characters the site uses (Geist cut to weights 400-500), woff2 only, `font-display: swap`; only the serif is preloaded, at high priority; each has a fallback face with matched metrics (`app/globals.css`) |
 | Display size | Up to 140px, line height 0.94, height-capped with svh | Keeps the hero buttons above the fold on 1366x768 |
 | Shape | Pill buttons; square media; no shadows, gradients, glass cards or glow | |
 | Motion | Hover 100ms, UI 200ms, page 300ms, heading reveal 600ms with a 70ms stagger per line; ease-out `cubic-bezier(.22,1,.36,1)` | Transform and opacity only |
@@ -44,7 +44,8 @@ Dark, cinematic, engineered: a warm near-black page, a serif display face, and o
 
 ## Motion system (`lib/motion/runtime.ts`)
 
-- One scroll system: Lenis (desktop, `pointer: fine`) driven by GSAP's ticker and synced to ScrollTrigger. Touch devices keep native scrolling. It is loaded after first paint, when the browser is idle.
+- One scroll system: Lenis (desktop, `pointer: fine`) driven by GSAP's ticker and synced to ScrollTrigger. Touch devices keep native scrolling.
+- Start gate (`lib/motion/start-gate.ts`): the scene and the motion runtime load on the first of idle-after-load or the first scroll, pointer move, touch or key press. Until the scene starts, a still of the particle field is drawn into a 2D canvas (never an LCP candidate).
 - Section h2s carry `data-reveal`: SplitText masks the lines and they rise as the heading enters, then the markup is restored. Headings already on screen are never hidden.
 - Services: pinned (a CSS sticky stage over four screens of scroll; the scene input sets the step) only on screens at least 768px wide and 700px tall. If the stage content doesn't fit, `[data-flow]` drops it back to stacked blocks. Phones, short screens, no JavaScript and reduced motion get the four services as normal blocks. Scroll positions are measured again after fonts and images load, and on resize and orientation change.
 - Custom cursor on desktop only: a dot plus a ring that grows into a lime "View" over projects (`data-cursor="view"`).
