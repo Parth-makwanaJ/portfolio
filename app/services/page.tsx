@@ -19,7 +19,7 @@ export default function ServicesPage() {
       <section aria-labelledby="services-title" className="pt-10 pb-(--section-space) md:pt-16">
         <SectionHeader
           as="h1"
-          number="—"
+          number=""
           label="Services"
           id="services-title"
           title="Services"

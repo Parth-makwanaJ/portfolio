@@ -34,7 +34,7 @@ export function MobileMenu({ links, email }: { links: { href: string; label: str
           setMounted(true);
           setOpen(true);
         }}
-        className="grid size-9 place-items-center border border-rule-strong md:hidden"
+        className="grid size-11 place-items-center border border-rule-strong md:hidden"
       >
         <Menu className="size-4" aria-hidden="true" />
       </button>

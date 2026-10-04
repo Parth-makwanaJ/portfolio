@@ -28,7 +28,7 @@ export function SectionHeader({
   return (
     <div className={cn("container-page grid-12 gap-y-4 border-t border-rule-strong pt-4", className)}>
       <p className="label col-span-4 flex gap-4 text-fg-subtle md:col-span-3">
-        <span className="text-fg">{number}</span>
+        {number && <span className="text-fg">{number}</span>}
         <span>{label}</span>
       </p>
       <div className="col-span-4 md:col-span-9">

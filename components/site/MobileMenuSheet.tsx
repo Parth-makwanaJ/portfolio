@@ -40,7 +40,7 @@ export default function MobileMenuSheet({
         <div className="flex h-14 items-center justify-between border-b border-rule-strong px-(--gutter)">
           <SheetTitle className="label">Menu</SheetTitle>
           <SheetDescription className="sr-only">Site navigation</SheetDescription>
-          <SheetClose aria-label="Close menu" className="grid size-9 place-items-center border border-rule-strong">
+          <SheetClose aria-label="Close menu" className="grid size-11 place-items-center border border-rule-strong">
             <X className="size-4" aria-hidden="true" />
           </SheetClose>
         </div>

@@ -20,7 +20,7 @@ export default function WorkPage() {
       <section aria-labelledby="work-title" className="pt-10 pb-(--section-space) md:pt-16">
         <SectionHeader
           as="h1"
-          number="—"
+          number=""
           label="Work"
           id="work-title"
           title="All projects"

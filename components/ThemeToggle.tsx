@@ -38,7 +38,7 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-pressed={dark}
       aria-label="Dark theme"
-      className="grid size-9 place-items-center border border-rule text-fg-muted transition-colors duration-(--dur-fast) ease-brand hover:border-rule-strong hover:text-fg"
+      className="grid size-11 place-items-center md:size-9 border border-rule text-fg-muted transition-colors duration-(--dur-fast) ease-brand hover:border-rule-strong hover:text-fg"
     >
       {/* Both icons are in the HTML; CSS shows the right one, so nothing shifts on hydration. */}
       <Sun className="hidden size-4 dark:block" aria-hidden="true" />
