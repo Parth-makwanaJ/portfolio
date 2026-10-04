@@ -7,6 +7,7 @@ import { ProjectCard } from "@/components/ProjectCard";
 import { MagneticButton } from "@/components/motion/MagneticButton";
 import { FinalCta } from "@/components/home/FinalCta";
 import { getService, profile, projectsForService, services, site } from "@/content/site";
+import { pageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -20,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const s = getService(slug);
   if (!s) return {};
-  return { title: `${s.name} | Parth Makwana`, description: s.short };
+  return pageMetadata({ title: s.name, description: s.summary.length <= 155 ? s.summary : s.short, path: `/services/${s.slug}` });
 }
 
 export default async function ServicePage({ params }: Props) {

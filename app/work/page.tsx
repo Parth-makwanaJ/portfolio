@@ -1,14 +1,15 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { SectionHeader } from "@/components/SectionHeader";
 import { WorkGrid } from "@/components/work/WorkGrid";
 import { FinalCta } from "@/components/home/FinalCta";
 import { projects, type ProjectCategory } from "@/content/site";
 
-export const metadata: Metadata = {
-  title: "Work | Parth Makwana",
-  description: "Shopify stores, Laravel and Node.js backends and web apps built by Parth Makwana. Filter by category.",
-};
+export const metadata = pageMetadata({
+  title: "Work: Shopify stores, backends and web apps",
+  description: "Shopify stores, Laravel and Node.js backends and web apps by Parth Makwana, with what each client needed and what was built.",
+  path: "/work",
+});
 
 const categories: ProjectCategory[] = ["Shopify", "Backend & APIs", "Web apps"];
 

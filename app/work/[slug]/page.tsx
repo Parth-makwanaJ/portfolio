@@ -10,6 +10,7 @@ import { VideoShowcase } from "@/components/VideoShowcase";
 import { RevealText } from "@/components/motion/RevealText";
 import { FinalCta } from "@/components/home/FinalCta";
 import { getProject, getService, imageUrl, nextProject, profile, projects, site } from "@/content/site";
+import { pageMetadata } from "@/lib/seo";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -23,10 +24,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const p = getProject(slug);
   if (!p) return {};
-  return {
-    title: `${p.name}: ${p.category} case study | Parth Makwana`,
+  return pageMetadata({
+    title: `${p.name}: ${p.category} case study`,
     description: p.summary,
-  };
+    path: `/work/${p.slug}`,
+    type: "article",
+  });
 }
 
 export default async function CaseStudy({ params }: Props) {

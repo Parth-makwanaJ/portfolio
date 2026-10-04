@@ -63,6 +63,10 @@ server {
     include /etc/letsencrypt/options-ssl-nginx.conf;
     ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
 
+    # Tell browsers to always use https for this host (2 years). Add includeSubDomains only once
+    # every subdomain serves https.
+    add_header Strict-Transport-Security "max-age=63072000" always;
+
     location / {
         proxy_pass http://127.0.0.1:3000;
         proxy_http_version 1.1;
@@ -77,6 +81,7 @@ server {
 ```
 
 Notes:
+- The `Strict-Transport-Security` (HSTS) header is new: the live site does not send one today.
 - `proxy_pass` forwards the browser's `Accept` header by default. Do not strip it: `next/image` reads it to decide between AVIF and WebP. If you ever add `proxy_cache` for `/_next/image`, add `Accept` to the cache key.
 - If the certificate does not list `www.parthdev.co.in`, block 2 will fail the TLS handshake. Check with `sudo certbot certificates`. If www is missing, run `sudo certbot --nginx -d parthdev.co.in -d www.parthdev.co.in` first.
 - `http2 on;` needs nginx 1.25.1 or newer. The server reports 1.28.3, so it is fine. On older versions use `listen 443 ssl http2;` instead.

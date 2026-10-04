@@ -1,0 +1,30 @@
+# Parth Makwana
+
+> Parth Makwana is a developer and tech lead in Ahmedabad, India, taking on freelance projects. He builds Shopify stores and Laravel and Node.js backends, and makes slow sites fast.
+
+Contact: parthmakwan02@gmail.com
+Location: Ahmedabad, Gujarat, India
+
+## Services
+
+- [Shopify development](https://parthdev.co.in/services/shopify-development): new store builds and rebuilds on a custom theme, custom sections, payment gateways, shipping automation (for example Shiprocket), ongoing maintenance.
+- [Backend and API development](https://parthdev.co.in/services/backend-api-development): REST APIs for web and mobile apps, admin dashboards, payment services, Firebase notifications, Redis caching and database tuning. Laravel, Node.js, PHP, MySQL, SQL Server.
+- [Speed and Core Web Vitals](https://parthdev.co.in/services/speed-core-web-vitals): audits of LCP, INP and CLS, image optimisation, server-side caching, database query tuning, before and after report.
+- [SEO audits](https://parthdev.co.in/services/seo-audits): crawling and indexing, titles and headings, structured data, Core Web Vitals, a prioritised fix list.
+
+## Selected work
+
+- [Sandesh](https://parthdev.co.in/work/sandesh): news CMS and APIs for a large Gujarati news site (Laravel, Node.js, MySQL).
+- [Matrubharti](https://parthdev.co.in/work/matrubharti): backend APIs and payment services for a story and book publishing app (Node.js, Laravel, Redis).
+- [Crystal World](https://parthdev.co.in/work/crystal-world): Shopify store built from scratch with payments and Shiprocket delivery automation.
+- [Champions Cricket Club](https://parthdev.co.in/work/champions-cricket-club): Laravel club management system for players, subscriptions, events and venues.
+- [All projects](https://parthdev.co.in/work)
+
+## Pages
+
+- [Home](https://parthdev.co.in/)
+- [Services](https://parthdev.co.in/services)
+- [Work](https://parthdev.co.in/work)
+- [About](https://parthdev.co.in/about): experience, awards, resume
+- [Contact](https://parthdev.co.in/contact)
+- [Resume (PDF)](https://parthdev.co.in/parth-makwana-resume.pdf)

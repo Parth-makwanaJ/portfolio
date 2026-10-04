@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
@@ -6,10 +6,11 @@ import { SectionHeader } from "@/components/SectionHeader";
 import { FinalCta } from "@/components/home/FinalCta";
 import { projectsForService, services } from "@/content/site";
 
-export const metadata: Metadata = {
-  title: "Services | Parth Makwana",
-  description: "Shopify development, Laravel and Node.js backends, speed and Core Web Vitals fixes, and technical SEO audits.",
-};
+export const metadata = pageMetadata({
+  title: "Services: Shopify, backends, speed and SEO",
+  description: "Shopify development, Laravel and Node.js backends, speed and Core Web Vitals fixes, and technical SEO audits by Parth Makwana.",
+  path: "/services",
+});
 
 export default function ServicesPage() {
   return (

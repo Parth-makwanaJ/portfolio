@@ -4,7 +4,7 @@ import "./globals.css";
 import { Header } from "@/components/site/Header";
 import { GridOverlay } from "@/components/site/GridOverlay";
 import { Footer } from "@/components/site/Footer";
-import { imageCdn } from "@/content/site";
+import { imageCdn, site } from "@/content/site";
 import { cn } from "@/lib/utils";
 
 const sans = Inter_Tight({
@@ -24,9 +24,12 @@ const themeScript =
   "(function(){var d=document.documentElement;d.classList.add('js');try{if(localStorage.getItem('theme')==='dark')d.classList.add('dark')}catch(e){}})()";
 
 export const metadata: Metadata = {
-  title: "Parth Makwana | Developer and tech lead",
+  metadataBase: new URL(site.url),
+  title: { default: site.name, template: `%s | ${site.name}` },
   description:
     "Parth Makwana builds fast Shopify stores and Laravel and Node.js backends, and fixes slow sites. Based in Ahmedabad, India.",
+  authors: [{ name: site.name, url: site.url }],
+  creator: site.name,
 };
 
 export default function RootLayout({

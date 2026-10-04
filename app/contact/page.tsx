@@ -1,13 +1,14 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { ContactForm } from "@/components/contact/ContactForm";
 import { contact, profile } from "@/content/site";
 import { publicLinks } from "@/lib/env";
 
-export const metadata: Metadata = {
-  title: "Contact | Start a project with Parth Makwana",
-  description: "Tell Parth Makwana about your Shopify store, backend, speed or SEO project. Email, WhatsApp or the form.",
-};
+export const metadata = pageMetadata({
+  title: "Contact: start a project",
+  description: "Tell Parth Makwana about your Shopify store, backend, speed or SEO project by email, WhatsApp or the contact form.",
+  path: "/contact",
+});
 
 export default function ContactPage() {
   return (

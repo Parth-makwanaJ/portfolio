@@ -129,6 +129,9 @@ export const profile = {
   intro:
     "I'm Parth, a developer and tech lead in Ahmedabad, India. I build Shopify stores, Laravel and Node.js backends, and I make slow sites fast.",
   availability: "Taking on new freelance projects",
+  // TODO: where do you take clients from? e.g. ["India", "United Kingdom", "United States"] or "Worldwide".
+  // Used for areaServed in structured data; left out while null.
+  areaServed: null as string | string[] | null,
   // Original is 3968 x 4288; keep that ratio.
   photo: cdnImage("2024/09/09/Myself.png", 3968, 4288, "Parth Makwana standing in a studio, wearing glasses, a grey t-shirt and black joggers"),
   resume: "/parth-makwana-resume.pdf",

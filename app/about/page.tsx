@@ -1,16 +1,21 @@
-import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import { Download } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { SectionHeader } from "@/components/SectionHeader";
 import { FinalCta } from "@/components/home/FinalCta";
+import { JsonLd } from "@/components/site/JsonLd";
 import { awards, experience, profile, stats } from "@/content/site";
+import { personSchema } from "@/lib/schema";
 
-export const metadata: Metadata = {
-  title: "About Parth Makwana | Developer in Ahmedabad",
+export const metadata = pageMetadata({
+  title: "About Parth Makwana, developer in Ahmedabad",
+  absoluteTitle: true,
   description:
-    "Parth Makwana is a developer and tech lead in Ahmedabad, India, building Shopify stores and Laravel and Node.js backends.",
-};
+    "Parth Makwana is a developer and tech lead in Ahmedabad, India. Experience, awards and resume for Shopify, Laravel and Node.js work.",
+  path: "/about",
+  type: "profile",
+});
 
 export default function AboutPage() {
   // The story is a TODO in content/site.ts; until it is written, the intro stands in.
@@ -132,6 +137,7 @@ export default function AboutPage() {
       </div>
 
       <FinalCta />
+      <JsonLd data={personSchema()} />
     </>
   );
 }
