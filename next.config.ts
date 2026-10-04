@@ -4,6 +4,8 @@ const nextConfig: NextConfig = {
   experimental: {
     // radix-ui is one barrel that re-exports every primitive; load only what is used.
     optimizePackageImports: ["radix-ui"],
+    // Tailwind output is small (~11 KB gzipped); inlining it removes the render-blocking request.
+    inlineCss: true,
   },
   images: {
     // Images are resized by the remote host in content/site.ts (imageCdn), not by this server.

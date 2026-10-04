@@ -48,6 +48,7 @@ export function WorkGrid({ projects, categories }: { projects: Project[]; catego
               project={p}
               index={i}
               headingLevel="h2"
+              preload={i === 0}
               sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw"
             />
           </li>

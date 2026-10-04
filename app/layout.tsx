@@ -7,16 +7,19 @@ import { Footer } from "@/components/site/Footer";
 import { imageCdn, site } from "@/content/site";
 import { cn } from "@/lib/utils";
 
+// display "optional": the font is used if it arrives within ~100ms (it is preloaded), otherwise the
+// size-adjusted fallback stays for that page view. Text never re-flows, so no layout shift and
+// the headline (the LCP element) is never held back by the font.
 const sans = Inter_Tight({
   subsets: ["latin"],
   variable: "--font-inter-tight",
-  display: "swap",
+  display: "optional",
 });
 
 const mono = IBM_Plex_Mono({
   subsets: ["latin"],
   variable: "--font-plex-mono",
-  display: "swap",
+  display: "optional",
   weight: ["400"],
 });
 

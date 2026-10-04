@@ -1,9 +1,10 @@
 "use client";
 
 /**
- * Scroll-linked process sequence. A 1px line draws down beside the steps (scaleY) and each step
- * lights up (opacity) as the line reaches it; a sticky counter shows the current step.
- * Transform and opacity only, written straight to the DOM once per frame (no re-renders, no library).
+ * Scroll-linked process sequence. A 1px line draws down beside the steps (scaleY) and each step's
+ * red marker scales in as the line reaches it; a sticky counter shows the current step.
+ * Step text always stays at full contrast. Transform only, written straight to the DOM once per
+ * frame (no re-renders, no library).
  * Without JS, or with reduced motion, everything is shown in full.
  */
 
@@ -20,11 +21,11 @@ export function ProcessSteps({ steps }: { steps: { step: string; text: string }[
     const list = listRef.current;
     const line = lineRef.current;
     if (!list || !line) return;
-    const items = Array.from(list.querySelectorAll<HTMLElement>("[data-step]"));
+    const markers = Array.from(list.querySelectorAll<HTMLElement>("[data-marker]"));
 
     if (reduce) {
       line.style.transform = "";
-      items.forEach((el) => (el.style.opacity = ""));
+      markers.forEach((el) => (el.style.transform = ""));
       return;
     }
 
@@ -39,9 +40,9 @@ export function ProcessSteps({ steps }: { steps: { step: string; text: string }[
       const p = Math.min(1, Math.max(0, (start - r.top) / (r.height - (end - start) || 1)));
       line.style.transform = `scaleY(${p})`;
       let current = 0;
-      items.forEach((el, i) => {
-        const on = i === 0 ? p > 0 : p >= i / items.length + 0.02;
-        el.style.opacity = on ? "1" : "0.28";
+      markers.forEach((el, i) => {
+        const on = i === 0 ? p > 0 : p >= i / markers.length + 0.02;
+        el.style.transform = on ? "scale(1)" : "scale(0)";
         if (on) current = i;
       });
       if (counterRef.current) counterRef.current.textContent = String(current + 1).padStart(2, "0");
@@ -73,9 +74,13 @@ export function ProcessSteps({ steps }: { steps: { step: string; text: string }[
           {steps.map((s, i) => (
             <li
               key={s.step}
-              data-step
-              className="grid grid-cols-[3rem_1fr] gap-x-4 border-b border-rule py-8 pl-6 transition-opacity duration-(--dur-base) ease-brand md:grid-cols-[5rem_1fr_1fr] md:gap-x-(--grid-gap) md:py-10 md:pl-8"
+              className="relative grid grid-cols-[3rem_1fr] gap-x-4 border-b border-rule py-8 pl-6 md:grid-cols-[5rem_1fr_1fr] md:gap-x-(--grid-gap) md:py-10 md:pl-8"
             >
+              <span
+                data-marker
+                aria-hidden="true"
+                className="absolute top-[2.6rem] -left-[5px] size-[11px] bg-signal transition-transform duration-(--dur-base) ease-brand md:top-[3.1rem]"
+              />
               <span className="label pt-2 text-fg-subtle">{String(i + 1).padStart(2, "0")}</span>
               <h3 className="text-h3">{s.step}</h3>
               <p className="col-start-2 mt-2 max-w-[40ch] text-fg-muted md:col-start-3 md:mt-1">{s.text}</p>

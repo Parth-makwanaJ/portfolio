@@ -15,6 +15,7 @@ export function ProjectCard({
   sizes,
   large = false,
   headingLevel = "h3",
+  preload = false,
   className,
 }: {
   project: Project;
@@ -22,18 +23,20 @@ export function ProjectCard({
   sizes: string;
   large?: boolean;
   headingLevel?: "h2" | "h3";
+  /** Load the screenshot first (only for a card that is visible on load). */
+  preload?: boolean;
   className?: string;
 }) {
   const Heading = headingLevel;
   return (
     <Link
       href={`/work/${project.slug}`}
-      aria-label={`${project.name}: case study`}
       className={cx("group flex h-full flex-col bg-bg p-4 md:p-5", className)}
     >
       <ProjectFrame
         image={project.image}
         sizes={sizes}
+        preload={preload}
         imageClassName="transition-transform duration-(--dur-slow) ease-brand group-hover:-translate-y-[2%] group-hover:scale-[1.02] group-focus-visible:-translate-y-[2%] group-focus-visible:scale-[1.02] motion-reduce:transform-none"
       />
       <div className="mt-4 flex items-start justify-between gap-4">
