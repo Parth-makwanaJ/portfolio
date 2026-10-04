@@ -18,6 +18,7 @@ export function HeaderShell({ children }: { children: React.ReactNode }) {
 
   return (
     <header
+      data-site-chrome
       data-scrolled={scrolled ? "" : undefined}
       className="group/header fixed inset-x-0 top-0 z-50 border-b border-rule-strong bg-bg transition-transform duration-(--dur-base) ease-brand md:data-scrolled:-translate-y-3"
     >

@@ -16,7 +16,7 @@ export function Header() {
   return (
     <>
       {/* The bar is fixed; this spacer holds its place so content never shifts. */}
-      <div aria-hidden="true" className="h-14 md:h-16" />
+      <div aria-hidden="true" data-site-chrome className="h-14 md:h-16" />
       <HeaderShell>
         <div className="container-page grid-12 h-14 items-center md:h-16">
           <Link

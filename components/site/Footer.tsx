@@ -6,7 +6,7 @@ import { publicLinks } from "@/lib/env";
 export function Footer() {
   const year = new Date().getFullYear();
   return (
-    <footer className="relative z-10 border-t border-rule-strong">
+    <footer data-site-chrome className="relative z-10 border-t border-rule-strong">
       <div className="container-page grid-12 gap-y-10 py-12 md:py-16">
         <div className="col-span-4 md:col-span-4">
           <p className="text-h3">{profile.name}</p>

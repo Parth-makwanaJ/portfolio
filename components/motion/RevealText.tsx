@@ -10,22 +10,23 @@
  * Swiss timing tokens. Never use this on the hero headline.
  */
 
-import { Fragment, useRef, type ElementType } from "react";
+import { Fragment, useRef } from "react";
 import { useInView } from "@/lib/hooks";
 import { cx } from "@/lib/cx";
 
 export function RevealText({
   text,
-  as: Tag = "h2",
+  as = "h2",
   id,
   className,
 }: {
   text: string;
-  as?: ElementType;
+  as?: "h2" | "h3" | "p";
   id?: string;
   className?: string;
 }) {
-  const ref = useRef<HTMLElement>(null);
+  const ref = useRef<HTMLHeadingElement>(null);
+  const Tag = as as "h2";
   const inView = useInView(ref, { rootMargin: "0px 0px -15% 0px" });
   const words = text.split(" ");
 
