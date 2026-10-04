@@ -12,19 +12,23 @@ export const navLinks = [
 // Phase 3 adds: shrink on scroll, mobile menu, active link state.
 export function Header() {
   return (
-    <header className="sticky top-0 z-50 border-b border-rule bg-bg/85 backdrop-blur-sm">
-      <div className="container-page flex h-16 items-center justify-between gap-6 md:h-20">
-        <Link href="/" className="label text-fg" aria-label={`${profile.name}, home`}>
+    <header className="sticky top-0 z-50 border-b border-rule-strong bg-bg">
+      <div className="container-page grid-12 h-14 items-center md:h-16">
+        <Link
+          href="/"
+          className="col-span-2 text-small font-medium tracking-tight text-fg md:col-span-3"
+          aria-label={`${profile.name}, home`}
+        >
           {profile.name}
         </Link>
 
-        <nav aria-label="Main" className="hidden md:block">
-          <ul className="flex items-center gap-8">
+        <nav aria-label="Main" className="hidden md:col-span-6 md:col-start-4 md:block">
+          <ul className="grid grid-cols-4">
             {navLinks.map((l) => (
               <li key={l.href}>
                 <Link
                   href={l.href}
-                  className="text-small text-fg-muted transition-colors duration-(--dur-fast) ease-brand hover:text-fg"
+                  className="text-small font-medium text-fg-muted transition-colors duration-(--dur-fast) ease-brand hover:text-fg"
                 >
                   {l.label}
                 </Link>
@@ -33,11 +37,11 @@ export function Header() {
           </ul>
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="col-span-2 flex items-center justify-end gap-2 md:col-span-3">
           <ThemeToggle />
           <Link
             href="/contact"
-            className="hidden h-10 items-center rounded-(--radius) bg-signal px-4 text-small font-medium text-on-signal transition-opacity duration-(--dur-fast) ease-brand hover:opacity-90 sm:inline-flex"
+            className="hidden h-9 items-center bg-signal px-4 text-small font-medium text-on-signal transition-opacity duration-(--dur-fast) ease-brand hover:opacity-90 sm:inline-flex"
           >
             Start a project
           </Link>

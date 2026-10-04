@@ -2,7 +2,12 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   images: {
-    formats: ["image/avif", "image/webp"],
+    // Images are resized by the remote host in content/site.ts (imageCdn), not by this server.
+    loader: "custom",
+    loaderFile: "./lib/image-loader.ts",
+    // The resizer stops cropping above the source width (~1900px), so cap at 1600.
+    deviceSizes: [640, 828, 1080, 1280, 1600],
+    imageSizes: [256, 384],
   },
   async redirects() {
     return [

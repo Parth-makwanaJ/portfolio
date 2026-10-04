@@ -16,6 +16,7 @@ export type ServiceSlug =
 export type ProjectCategory = "Shopify" | "Backend & APIs" | "Web apps";
 
 export type Image = {
+  /** Full resizer URL with a "{size}" placeholder and "?ar=height/width", filled in by lib/image-loader.ts. */
   src: string;
   width: number;
   height: number;
@@ -83,6 +84,27 @@ export type Stat = { value: number; suffix: string; label: string; confirmed: bo
 
 export type TechGroup = { group: string; items: { name: string; icon: string }[] };
 
+/**
+ * Remote images. Every image is resized by the host below (imgproxy URL format):
+ *   {resizer}/rs:fill:{width}:{height}/q:{quality}/plain/{origin}/{path}@{format}
+ * Change the host here and nowhere else. Compressed local copies are kept in
+ * public/images as a backup (named by project slug) but are not used.
+ */
+export const imageCdn = {
+  resizer: "https://resize.sandesh.com",
+  origin: "epapercdn.sandesh.com/images",
+  format: "webp",
+} as const;
+
+/** Builds an Image whose src carries its aspect ratio for the loader. */
+function cdnImage(path: string, ratioW: number, ratioH: number, alt: string): Image {
+  const width = 1600;
+  const height = Math.round((width * ratioH) / ratioW);
+  const format = imageCdn.format ? `@${imageCdn.format}` : "";
+  const ar = (ratioH / ratioW).toFixed(4);
+  return { src: `${imageCdn.resizer}/{size}/plain/${imageCdn.origin}/${path}${format}?ar=${ar}`, width, height, alt };
+}
+
 export const site = {
   url: "https://parthdev.co.in",
   name: "Parth Makwana",
@@ -98,12 +120,8 @@ export const profile = {
   intro:
     "I'm Parth, a developer and tech lead in Ahmedabad, India. I build Shopify stores, Laravel and Node.js backends, and I make slow sites fast.",
   availability: "Taking on new freelance projects",
-  photo: {
-    src: "/images/parth-makwana.jpg",
-    width: 1600,
-    height: 1729,
-    alt: "Parth Makwana standing in a studio, wearing glasses, a grey t-shirt and black joggers",
-  } satisfies Image,
+  // Original is 3968 x 4288; keep that ratio.
+  photo: cdnImage("2024/09/09/Myself.png", 3968, 4288, "Parth Makwana standing in a studio, wearing glasses, a grey t-shirt and black joggers"),
   resume: "/parth-makwana-resume.pdf",
   // TODO: write your story for /about in your own words (3 to 5 short paragraphs).
   // How you started, what you work on now, how you like to work with clients.
@@ -242,12 +260,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Laravel", "Node.js", "MySQL"],
     live: "https://sandesh.com/",
-    image: {
-      src: "/images/projects/sandesh.jpg",
-      width: 1600,
-      height: 802,
-      alt: "Sandesh news homepage with Gujarati headlines, a live blog and trending videos",
-    },
+    image: cdnImage("2024/09/09/Sandesh.png", 16, 9, "Sandesh news homepage with Gujarati headlines, a live blog and trending videos"),
     featured: true,
   },
   {
@@ -269,12 +282,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Node.js", "Laravel", "PHP", "Redis"],
     live: "https://matrubharti.com/",
-    image: {
-      src: "/images/projects/matrubharti.jpg",
-      width: 1600,
-      height: 802,
-      alt: "Matrubharti homepage inviting readers to publish and read stories, novels and books",
-    },
+    image: cdnImage("2024/09/09/Matrubharti.png", 16, 9, "Matrubharti homepage inviting readers to publish and read stories, novels and books"),
     featured: true,
   },
   {
@@ -295,12 +303,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify", "Shiprocket"],
     live: "https://crystalworlld.com/",
-    image: {
-      src: "/images/projects/crystal-world.jpg",
-      width: 1600,
-      height: 748,
-      alt: "Crystal World Shopify store showing the founder's story next to the shop menu",
-    },
+    image: cdnImage("2024/09/09/crystalworlld.png", 16, 9, "Crystal World Shopify store showing the founder's story next to the shop menu"),
     featured: true,
   },
   {
@@ -321,12 +324,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Laravel", "MySQL"],
     live: "https://championscricket.club/",
-    image: {
-      src: "/images/projects/champions-cricket-club.jpg",
-      width: 1600,
-      height: 763,
-      alt: "Champions Cricket Club homepage with a batsman mid-shot and a register button",
-    },
+    image: cdnImage("2024/09/09/3c.png", 16, 9, "Champions Cricket Club homepage with a batsman mid-shot and a register button"),
     featured: true,
   },
   {
@@ -347,12 +345,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["CodeIgniter", "SQL Server", "Firebase"],
     live: "https://www.prasadgroup.com/",
-    image: {
-      src: "/images/projects/field-tracking-system.jpg",
-      width: 1600,
-      height: 747,
-      alt: "Admin sign-in screen of the Field Tracking System",
-    },
+    image: cdnImage("2024/09/09/FTS.png", 16, 9, "Admin sign-in screen of the Field Tracking System"),
     featured: false,
   },
   {
@@ -373,12 +366,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Node.js"],
     live: null,
-    image: {
-      src: "/images/projects/pragati-finance.jpg",
-      width: 1600,
-      height: 759,
-      alt: "Pragati Finance dashboard with transaction totals and a daily transactions table",
-    },
+    image: cdnImage("2024/09/09/Pragati.png", 16, 9, "Pragati Finance dashboard with transaction totals and a daily transactions table"),
     featured: false,
   },
   {
@@ -400,12 +388,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://duali.co/",
-    image: {
-      src: "/images/projects/duali.jpg",
-      width: 1600,
-      height: 764,
-      alt: "Duali Shopify store homepage with floral ceramic vases",
-    },
+    image: cdnImage("2024/09/09/Duali.png", 16, 9, "Duali Shopify store homepage with floral ceramic vases"),
     featured: false,
   },
   {
@@ -425,12 +408,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://luxaderme.in/",
-    image: {
-      src: "/images/projects/luxaderme.jpg",
-      width: 1600,
-      height: 765,
-      alt: "LuxaDerme Shopify store homepage showing Korean skincare products",
-    },
+    image: cdnImage("2024/09/09/luxaderme.png", 16, 9, "LuxaDerme Shopify store homepage showing Korean skincare products"),
     featured: false,
   },
   {
@@ -450,12 +428,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://whitemaisondecouture.com/",
-    image: {
-      src: "/images/projects/white-maison-de-couture.jpg",
-      width: 1600,
-      height: 765,
-      alt: "White Maison De Couture Shopify store featuring a designer collection",
-    },
+    image: cdnImage("2024/09/09/WMDC.png", 16, 9, "White Maison De Couture Shopify store featuring a designer collection"),
     featured: false,
   },
   {
@@ -475,12 +448,7 @@ export const projects: Project[] = [
     result: null,
     stack: ["Shopify"],
     live: "https://aminnewyork.com/",
-    image: {
-      src: "/images/projects/amin-new-york.jpg",
-      width: 1600,
-      height: 767,
-      alt: "Amin New York Shopify store showing custom-made menswear",
-    },
+    image: cdnImage("2024/09/09/aminnewyork.png", 16, 9, "Amin New York Shopify store showing custom-made menswear"),
     featured: false,
   },
 ];
