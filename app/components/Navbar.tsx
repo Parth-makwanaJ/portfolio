@@ -49,7 +49,7 @@ export default function Navbar() {
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
         >
-          Port<span className="text-gradient">folio</span>
+          Par<span className="text-gradient">th</span>
         </motion.a>
         
         <div className="flex items-center">

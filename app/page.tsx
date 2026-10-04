@@ -15,7 +15,7 @@ export default function Home() {
       <Projects />
       <Contact />
       
-      <footer className="py-8 text-center text-foreground/40 text-sm border-t border-white/5 mx-6 lg:mx-24 mb-6 relative z-10">
+      <footer className="py-8 text-center text-foreground/60 text-sm border-t border-white/5 mx-6 lg:mx-24 mb-6 relative z-10">
         <p>© {new Date().getFullYear()} Portfolio. Crafted with Next.js, Framer Motion & Three.js</p>
       </footer>
     </main>

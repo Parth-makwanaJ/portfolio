@@ -2,9 +2,9 @@ import React from "react";
 import {
   SiPhp, SiJavascript, SiPython, SiLaravel, SiNodedotjs, SiCodeigniter, SiNextdotjs,
   SiMysql, SiSupabase, SiRedis, SiFirebase, SiDigitalocean, SiVercel,
-  SiShopify, SiFramer, SiHuggingface, SiOpenai, SiScikitlearn
+  SiShopify, SiFramer, SiHuggingface, SiOpenai, SiScikitlearn, SiGrafana
 } from "react-icons/si";
-import { FaDatabase } from "react-icons/fa6";
+import { FaDatabase, FaAws } from "react-icons/fa6";
 
 export const skills = [
   // Languages
@@ -28,9 +28,11 @@ export const skills = [
   { name: "Firebase", level: 85, category: "Tools", icon: <SiFirebase className="w-6 h-6" /> },
   { name: "DigitalOcean", level: 75, category: "Tools", icon: <SiDigitalocean className="w-6 h-6" /> },
   { name: "Vercel", level: 80, category: "Tools", icon: <SiVercel className="w-6 h-6" /> },
+  { name: "Grafana", level: 100, category: "Tools", icon: <SiGrafana className="w-6 h-6" /> },
 
   // Platforms
   { name: "Shopify", level: 95, category: "Platforms", icon: <SiShopify className="w-6 h-6" /> },
+  { name: "AWS", level: 90, category: "Platforms", icon: <FaAws className="w-6 h-6" /> },
   { name: "Framer", level: 75, category: "Platforms", icon: <SiFramer className="w-6 h-6" /> },
 
   // AI/ML
@@ -72,7 +74,7 @@ export const projects = [
     title: "Sandesh",
     description: "Led development of a large-scale news CMS and API system with a high-volume database. Built core modules and optimized Node.js APIs.",
     tech: ["Laravel", "Node.js", "MySQL"],
-    image: "/Sandesh.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/Sandesh.png",
     category: "CMS",
     live: "https://sandesh.com/",
     github: ""
@@ -81,7 +83,7 @@ export const projects = [
     title: "Field Tracking System",
     description: "Developed backend for a complaint tracking platform with notification integration. Architected logic to separate workflows for two companies.",
     tech: ["CodeIgniter", "SQL Server", "Firebase"],
-    image: "/FTS.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/FTS.png",
     category: "Web App",
     live: "http://prasadgroup.com/",
     github: ""
@@ -90,7 +92,7 @@ export const projects = [
     title: "Matrubharti",
     description: "Led backend APIs powering a Flutter app. Built payment microservices, managed admin dashboard, and implemented Redis caching.",
     tech: ["Node.js", "Laravel", "Core PHP", "Redis"],
-    image: "/Matrubharti.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/Matrubharti.png",
     category: "Mobile APIs",
     live: "https://matrubharti.com/",
     github: ""
@@ -99,7 +101,7 @@ export const projects = [
   //   title: "Keyword Generator - SEO Tool",
   //   description: "Built an SEO keyword generation tool using Python and a Hugging Face language model with custom prompt logic.",
   //   tech: ["Python", "Hugging Face"],
-  //   image: "/placeholder-project.jpg",
+  //   image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/placeholder-project.jpg",
   //   category: "AI/ML",
   //   live: "",
   //   github: ""
@@ -108,7 +110,7 @@ export const projects = [
     title: "Crystal World",
     description: "Built a custom Shopify store from scratch implementing payment gateways and automated delivery handling via Shiprocket.",
     tech: ["Shopify"],
-    image: "/crystalworlld.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/crystalworlld.png",
     category: "E-Commerce",
     live: "https://crystalworlld.com/",
     github: ""
@@ -117,7 +119,7 @@ export const projects = [
     title: "Duali",
     description: "Design, develop, maintain, and continuously optimize custom features and functionalities to enhance the performance and user experience of the Shopify store.",
     tech: ["Shopify"],
-    image: "/Duali.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/Duali.png",
     category: "E-Commerce",
     live: "https://duali.co/",
     github: ""
@@ -126,7 +128,7 @@ export const projects = [
     title: "LuxaDerme",
     description: "Create a high-performance, fast, and fully responsive Shopify store optimized for seamless user experience and efficient functionality.",
     tech: ["Shopify"],
-    image: "/luxaderme.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/luxaderme.png",
     category: "E-Commerce",
     live: "https://luxaderme.in/",
     github: ""
@@ -135,7 +137,7 @@ export const projects = [
     title: "White Maison De Couture",
     description: "Develop a scalable, high-speed Shopify store with a strong focus on performance optimization and intuitive user experience.",
     tech: ["Shopify"],
-    image: "/WMDC.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/WMDC.png",
     category: "E-Commerce",
     live: "https://whitemaisondecouture.com/",
     github: ""
@@ -144,7 +146,7 @@ export const projects = [
     title: "Amin New York",
     description: "Build and optimize a responsive Shopify store that delivers fast load times, smooth navigation, and an engaging user experience.",
     tech: ["Shopify"],
-    image: "/aminnewyork.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/aminnewyork.png",
     category: "E-Commerce",
     live: "https://aminnewyork.com/",
     github: ""
@@ -153,7 +155,7 @@ export const projects = [
     title: "Champions Cricket Club",
     description: "Built a Laravel-based cricket management system with player registration, subscriptions, events, teams, and venue management.",
     tech: ["Laravel"],
-    image: "/3c.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/3c.png",
     category: "Web App",
     live: "https://championscricket.club/",
     github: ""
@@ -162,7 +164,7 @@ export const projects = [
     title: "Pragati Finance",
     description: "Led backend API development for financial modules including interest calculation, brokerage, and transaction tracking.",
     tech: ["Node.js"],
-    image: "/Pragati.png",
+    image: "https://resize.sandesh.com/rs:fill:393:221/plain/epapercdn.sandesh.com/images/2024/09/09/Pragati.png",
     category: "Finance",
     live: "",
     github: ""

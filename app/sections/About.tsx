@@ -18,7 +18,16 @@ export default function About() {
         >
           <div className="absolute inset-0 bg-gradient-to-tr from-accent-cyan/20 to-accent-purple/20 mix-blend-overlay" />
           <div className="w-full h-full bg-foreground/5">
-            <img src="/Myself.png" alt="Parth Makwana" className="w-full h-full object-cover" />
+            <img 
+              src="https://resize.sandesh.com/rs:fill:590:738/plain/epapercdn.sandesh.com/images/2024/09/09/Myself.png" 
+              alt="Parth Makwana" 
+              className="w-full h-full object-cover hidden md:block" 
+            />
+            <img 
+              src="https://resize.sandesh.com/rs:fill:590:638/plain/epapercdn.sandesh.com/images/2024/09/09/Myself.png" 
+              alt="Parth Makwana" 
+              className="w-full h-full object-cover block md:hidden" 
+            />
           </div>
         </motion.div>
 

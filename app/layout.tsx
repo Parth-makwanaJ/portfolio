@@ -11,8 +11,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Premium Portfolio UI",
-  description: "A minimal 3D Next.js portfolio website",
+  title: "Parth Makwana | Backend Developer",
+  description: "Portfolio of Parth Makwana, a Backend Developer specializing in scalable architectures, efficient APIs, and high-performance systems.",
 };
 
 export default function RootLayout({
@@ -26,6 +26,10 @@ export default function RootLayout({
       className={`${inter.variable} antialiased`}
       suppressHydrationWarning
     >
+      <head>
+        <link rel="preconnect" href="https://resize.sandesh.com" />
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+      </head>
       <body className="min-h-full flex flex-col relative font-sans bg-background text-foreground transition-colors duration-300">
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
           <div className="mesh-bg bg-background transition-colors duration-300" />

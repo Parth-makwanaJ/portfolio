@@ -53,7 +53,7 @@ export default function Projects() {
                 />
               </div>
               <div className="p-6 flex-1 flex flex-col">
-                <h4 className="text-xl font-bold mb-2 group-hover:text-accent-cyan transition-colors">{project.title}</h4>
+                <h3 className="text-xl font-bold mb-2 group-hover:text-accent-cyan transition-colors">{project.title}</h3>
                 <p className="text-foreground/60 text-sm mb-6 flex-1 leading-relaxed">
                   {project.description}
                 </p>
@@ -66,12 +66,12 @@ export default function Projects() {
                 </div>
                 <div className="flex items-center gap-4 pt-4 border-t border-white/5">
                   {project.live && project.live !== "#" && project.live !== "" && (
-                    <a href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-accent-cyan transition-colors">
+                    <a aria-label={`Live Demo for ${project.title}`} href={project.live} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-accent-cyan transition-colors">
                       <ExternalLink className="w-4 h-4" /> Live Demo
                     </a>
                   )}
                   {project.github && project.github !== "#" && project.github !== "" && (
-                    <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-accent-purple transition-colors">
+                    <a aria-label={`Source code for ${project.title}`} href={project.github} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-sm font-medium hover:text-accent-purple transition-colors">
                       <Github className="w-4 h-4" /> Source
                     </a>
                   )}

@@ -38,7 +38,7 @@ export default function Experience() {
                       viewport={{ once: true, margin: "-100px" }}
                       className="text-right pr-8"
                     >
-                      <h4 className="text-xl font-bold">{exp.title}</h4>
+                      <h3 className="text-xl font-bold">{exp.title}</h3>
                       <div className="text-accent-cyan font-medium my-1">{exp.company}</div>
                       <div className="text-foreground/50 text-sm">{exp.duration}</div>
                     </motion.div>
@@ -50,7 +50,7 @@ export default function Experience() {
                       viewport={{ once: true, margin: "-100px" }}
                       className="text-left pl-8"
                     >
-                      <h4 className="text-xl font-bold">{exp.title}</h4>
+                      <h3 className="text-xl font-bold">{exp.title}</h3>
                       <div className="text-accent-purple font-medium my-1">{exp.company}</div>
                       <div className="text-foreground/50 text-sm">{exp.duration}</div>
                     </motion.div>
@@ -69,7 +69,7 @@ export default function Experience() {
                 >
                    {/* Mobile Header view */}
                    <div className="md:hidden mb-4">
-                     <h4 className="text-xl font-bold leading-tight">{exp.title}</h4>
+                     <h3 className="text-xl font-bold leading-tight">{exp.title}</h3>
                      <div className="text-gradient font-medium my-1">{exp.company}</div>
                      <div className="text-foreground/50 text-sm mb-4">{exp.duration}</div>
                    </div>
